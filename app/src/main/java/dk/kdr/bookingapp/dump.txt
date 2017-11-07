@@ -1,0 +1,33 @@
+ //Find boligforening ud fra brugerid
+        //Hent alle reservationer inden for tidsrummet, sorter på dato
+        //Lav vaskedage med vasketider, hvis der er en reservation den pågældende dag, så settes reservationen på vasketiden, og erLedigDag flaget sættes til true, slet reservationen fra reservationens listen.
+
+               // List<Reservation> resList = createReservation();
+        List<VaskeDag> vaskeDage = new ArrayList<>();
+        int antalBlokke = 6;
+
+        //Antal dager på kalenderen
+        for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
+
+            long milli = startDag.plusDays(i).toDateTime(LocalTime.MIDNIGHT).toInstant().getMillis(); // long værdien for den pågældende dato ved midnat.
+            ArrayList<VaskeTid> VaskeTider = new ArrayList<>();
+
+            for (int j = 0; j < antalBlokke; j++) {
+
+               //VaskeTid vTid = new VaskeTid(milli, tavleID, blok);
+
+                for (Reservation res : reservations) {
+         //           if (CalenderController.dateToMillis(new LocalDate(res.getDato())) == vTid.getDato() && res.getvaskeBlokID() == vTid.getVaskeBlok().getBlokID()) {
+              //          vTid.setReservation(res);
+                    }
+                }
+           //     VaskeTider.add(vTid);
+                Log.w(" ddd", "createVaskeDage: " + "antalvasketider " + VaskeTider.size());
+
+            }
+            Log.w("Vasketider størrelse: ", reservations.length + "");
+           // VaskeDag vDag = new VaskeDag(antalBlokke, VaskeTider);
+       //     vaskeDage.add(vDag);
+//        }
+//        this.vaskeDage = vaskeDage;
+//        return vaskeDage;

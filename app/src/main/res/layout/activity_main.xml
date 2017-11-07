@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:divider="?android:dividerVertical"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    tools:context="dk.kdr.bookingapp.MainActivity">
+
+
+    <EditText
+        android:id="@+id/bruger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#323232"
+        android:gravity="center_horizontal"
+        android:hint="Bruger id"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
+        android:textSize="30dp" />
+
+    <EditText
+        android:id="@+id/selskab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#323232"
+        android:gravity="center_horizontal"
+        android:hint="Selskab"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
+        android:textSize="30dp" />
+
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#323232"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
+        android:textSize="30dp"/>
+
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log ind" />
+</LinearLayout>
+
+
