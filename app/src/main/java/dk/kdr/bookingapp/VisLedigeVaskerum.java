@@ -34,7 +34,7 @@ public class VisLedigeVaskerum extends AppCompatActivity {
 
         blokText = (TextView) findViewById(R.id.bloktid);
         list = (ListView) findViewById(R.id.vaskerum_liste);
-        blokText.setText("Grøn Lort");
+        blokText.setText("Vaskerum");
         TavleAdapter ta = new TavleAdapter(this, ledigeRum);
 
         list.setAdapter(ta);
