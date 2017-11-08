@@ -46,42 +46,26 @@ public class VisVaskeDagActivity extends AppCompatActivity {
 
         long dato = b.getLong("Dato");
         ledigeTider = BookingApplication.vtCont.ledigeVaskeTider(dato);
-        vd = BookingApplication.vtCont.findVaskeDag(dato);
+        vd = BookingApplication.vtCont.findVaskeDag(dato); // TODO Denne kan virke forkert, fordi at implementationen af findvaskedag ikke går igennem tavlerne
 
-        vTid = vd.getVasketider();
+        vTid = vd.getVasketider(); //TODO Det er meget arbejde at for at blok at ende nogle start tider fra en vaskeblok, hvis der er tid skal dette refaktoreres
 
         System.out.println(vTid.get(0).getDato());
         String datoString = CalenderController.millisToDate(dato).toString();
         datoText.setText(datoString);
 
-       timeListe.setAdapter(new TimeListeAdapter(this, vd.getVasketider(),ledigeTider));
+        timeListe.setAdapter(new TimeListeAdapter(this, vd.getVasketider(), ledigeTider));
         timeListe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
 
-
-
-               // long dato = vTid.get(position).getDato();
-           //     System.out.println(dato);
-
-
-//                //Check om de tilgængelige reservationer er af samme vaskeblok som brugeren har valgt
-//                VaskeBlok vaskeblok = vTid.get(position).getVaskeBlok();
-//                for (Reservation res : new VaskeTidController().createReservation()) {
-//                    if (res.getvaskeBlokID() == vaskeblok.getBlokID() && dato == res.getDato()) {
-//                        resListe.add(res);
-//                    }
-//                }
-//
-////              Vaskeblok og de ledige reservationer pakkes ind for  at sendes til VisLedigeVaskerum aktivitetens
-//                Intent i = new Intent(getApplicationContext(), VisLedigeVaskerum.class);
-//                Bundle b = new Bundle();
-//                b.putParcelable("vaskeBlok", vaskeblok);
-//                b.putParcelableArrayList("reservationer", resListe);
-//                i.putExtras(b);
-//                getApplicationContext().startActivity(i);
+                long dato = vTid.get(position).getDato();
+                System.out.println(dato);
+                Intent i = new Intent(getApplicationContext(), VisLedigeVaskerum.class);
+                i.putExtra("Dato", dato);
+                getApplicationContext().startActivity(i);
             }
         });
 

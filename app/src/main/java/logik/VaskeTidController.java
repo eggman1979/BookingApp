@@ -77,8 +77,8 @@ public class VaskeTidController {
     public List<VaskeTavle> fillVaskeTavle(LocalDate startDag, LocalDate slutDag) {
         for (VaskeTavle tavle : tavler) {
             tavle.setVaskeDage(createVaskeDage(startDag, slutDag, tavle.getTavleID()));
-            //  System.out.println("Antal vaskedage i tavle " + tavle.getTavleID() + " er: " + tavle.getVaskeDage().size());
         }
+        opretLedighedsTabel();
         return tavler;
     }
 
@@ -148,5 +148,10 @@ public class VaskeTidController {
             }
         }
         return null;
+    }
+    public List<VaskeTid> findVaskeTiderFraBlok(long dato){
+        List<VaskeTid> vList = new ArrayList<>();
+
+        return vList;
     }
 }

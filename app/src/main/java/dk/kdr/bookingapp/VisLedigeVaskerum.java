@@ -7,9 +7,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import data.Reservation;
 import data.VaskeBlok;
+import data.VaskeDag;
+import data.VaskeTid;
+import logik.BookingApplication;
 
 public class VisLedigeVaskerum extends AppCompatActivity {
 
@@ -22,12 +26,14 @@ public class VisLedigeVaskerum extends AppCompatActivity {
         setContentView(R.layout.activity_vis_ledige_vaskerum);
 
         Intent i = getIntent();
-        ArrayList<Reservation> resListe = i.getExtras().getParcelableArrayList("reservationer");
-        VaskeBlok vaskeblok = i.getExtras().getParcelable("vaskeBlok");
+        long dato = i.getLongExtra("dato", -1L);
+        List<VaskeTid> vTider = BookingApplication.vtCont.findVaskeTiderFraBlok(dato);
+
+
         blokText = (TextView) findViewById(R.id.bloktid);
         list = (ListView) findViewById(R.id.vaskerum_liste);
-        blokText.setText(vaskeblok.getStartTid() + ":00");
-        TavleAdapter ta = new TavleAdapter(this, resListe, 3);
+      //  blokText.setText("Grøn Lort");
+        TavleAdapter ta = new TavleAdapter(this, null, 3);
 
         list.setAdapter(ta);
 

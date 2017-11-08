@@ -56,101 +56,54 @@ public class ConnectService extends Service {
         }
     }
 
-    public void hentReservationer(final long startDato, final long slutDato, final int boligID) throws IOException {
+    public void hentReservationer(final long startDato, final long slutDato, final int boligID) throws IOException { //TODO Der skal et boligselskabs id med som parameter
         new Thread(new Runnable() {
             @Override
             public void run() {
-                StringBuilder total = new StringBuilder();
-                String temp = "";
 
                 String line = "";
                 InputStream is = null;
+
                 try {
-                    try {
 
-                        URL url = new URL(baseURL + "reservationService/reservationer/" + startDato + "/" + slutDato + "/" + boligID);
-                        System.out.println(url.toString());
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.setRequestMethod("GET");
-                        conn.setConnectTimeout(5000);
-                        conn.connect();
-                        is = conn.getInputStream();
-                        BufferedReader r = new BufferedReader(new InputStreamReader(is));
+                    URL url = new URL(baseURL + "reservationService/reservationer/" + startDato + "/" + slutDato + "/" + boligID);
+                    line = openServiceConnection(url);
 
-                        line = r.readLine();
-                        Log.w("run: ", line);
-
-
-                    } catch (ProtocolException e) {
-                        e.printStackTrace();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        is.close();
-
-                    }
-
-                } catch (Exception e) {
-
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                Log.w("run: ", "");
-
                 Gson gson = new Gson();
 
-                    ArrayList<Reservation> resList = gson.fromJson(line, new TypeToken<List<Reservation>>() {
-                    }.getType());
-               if(resList != null && resList.size() > 0) {
-                   Log.w("data fra server", resList.get(0).getBrugerID() + "  der er noget?");
-                   BookingApplication.setReservation(resList);
-               }
+                ArrayList<Reservation> resList = gson.fromJson(line, new TypeToken<List<Reservation>>() {
+                }.getType());
+                if (resList != null && resList.size() > 0) {
+                    Log.w("data fra server", resList.get(0).getBrugerID() + "  der er noget?");
+                    BookingApplication.setReservation(resList);
+                }
             }
-
-
         }).start();
     }
 
-    public void hentBoligforening(int boligforeningId) throws IOException {
+    public void hentBoligforening(int boligforeningId) throws IOException {//TODO Der skal et boligselskabs id med som parameter
         final String urlExtend = "bfService/boligforeninger/" + boligforeningId;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                StringBuilder total = new StringBuilder();
-                String temp = "";
-
+                InputStream is = null;
                 String line = "";
+
                 try {
-                    try {
-                        InputStream is = null;
-                        URL url = new URL(baseURL + urlExtend);
-                        System.out.println(url.toString());
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.setRequestMethod("GET");
-                        conn.setConnectTimeout(5000);
-                        conn.connect();
-                        is = conn.getInputStream();
-                        BufferedReader r = new BufferedReader(new InputStreamReader(is));
 
-                        line = r.readLine();
-                        Log.w("run: ", line);
-
-
-                    } catch (ProtocolException e) {
-                        e.printStackTrace();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-
-
-                    }
-
-                } catch (Exception e) {
-
+                    URL url = new URL(baseURL + urlExtend);
+                    line = openServiceConnection(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                Log.w("run: ", "");
+
 
                 Gson gson = new Gson();
                 BoligForening resList = gson.fromJson(line, BoligForening.class);
@@ -169,51 +122,30 @@ public class ConnectService extends Service {
 
                 String line = "";
                 InputStream is = null;
+
                 try {
-                    try {
 
-                        URL url = new URL(baseURL + "vtService/vasketavler/1  ");
-                        System.out.println(url.toString());
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.setRequestMethod("GET");
-                        conn.setConnectTimeout(5000);
-                        conn.connect();
-                        is = conn.getInputStream();
-                        BufferedReader r = new BufferedReader(new InputStreamReader(is));
+                    URL url = new URL(baseURL + "vtService/vasketavler/1  ");//TODO Der skal et boligselskabs id med som parameter
+                    openServiceConnection(url);
 
-                        line = r.readLine();
-                        Log.w("run: ", line);
+                    Gson gson = new Gson();
 
-
-                    } catch (ProtocolException e) {
-                        e.printStackTrace();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        is.close();
-
-                    }
-
-                } catch (Exception e) {
-
+                    ArrayList<VaskeTavle> resList = gson.fromJson(line, new TypeToken<List<VaskeTavle>>() {
+                    }.getType());
+                    Log.w("data fra server", resList.size() + "");
+                    BookingApplication.vtCont.setVaskeTavler(resList);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                Log.w("run: ", "");
 
-                Gson gson = new Gson();
 
-                ArrayList<VaskeTavle> resList = gson.fromJson(line, new TypeToken<List<VaskeTavle>>() {
-                }.getType());
-                Log.w("data fra server", resList.size() + "");
-                BookingApplication.vtCont.setVaskeTavler(resList);
             }
-
-
         }).start();
     }
 
-    public void hentVaskeBlokke() throws IOException {
+    public void hentVaskeBlokke() throws IOException { //TODO Der skal et boligselskabs id med som parameter
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -221,45 +153,58 @@ public class ConnectService extends Service {
 
                 String line = "";
                 InputStream is = null;
+
                 try {
-                    try {
 
-                        URL url = new URL(baseURL + "vaskebloksservice/vaskeblokke/1");
-                        System.out.println(url.toString());
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.setRequestMethod("GET");
-                        conn.setConnectTimeout(5000);
-                        conn.connect();
-                        is = conn.getInputStream();
-                        BufferedReader r = new BufferedReader(new InputStreamReader(is));
+                    URL url = new URL(baseURL + "vaskebloksservice/vaskeblokke/1");
+                    String data = openServiceConnection(url);
+                    Log.w("run: ", "");
 
-                        line = r.readLine();
-                        Log.w("run: ", line);
-
-
-                    } catch (ProtocolException e) {
-                        e.printStackTrace();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        is.close();
-
-                    }
-
-                } catch (Exception e) {
-
+                    Gson gson = new Gson();
+                    ArrayList<VaskeBlok> resList = gson.fromJson(data, new TypeToken<List<VaskeBlok>>() {
+                    }.getType());
+                    Log.w("data fra server", resList.size() + "");
+                    BookingApplication.vtCont.setvBlokke(resList);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
                 }
-                Log.w("run: ", "");
-
-                Gson gson = new Gson();
-                ArrayList<VaskeBlok> resList = gson.fromJson(line, new TypeToken<List<VaskeBlok>>() {
-                }.getType());
-                Log.w("data fra server", resList.size() + "");
-                BookingApplication.vtCont.setvBlokke(resList);
             }
         }).start();
+    }
+
+    public String openServiceConnection(URL url) {
+        String line = "";
+        InputStream is = null;
+        try {
+            try {
+
+                System.out.println(url.toString());
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.connect();
+                is = conn.getInputStream();
+                BufferedReader r = new BufferedReader(new InputStreamReader(is));
+
+                line = r.readLine();
+                Log.w("run: ", line);
+
+
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                is.close();
+
+            }
+
+        } catch (Exception e) {
+
+        }
+        return line;
     }
 
 }

@@ -43,7 +43,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         System.out.println("activity " + startDay.toString());
         vs.fillVaskeTavle(startDay, null);
 
-        vs.opretLedighedsTabel();
+
 
 
         boolean landscape = getResources().getBoolean(R.bool.isLandscape);
@@ -99,8 +99,6 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         }
         maanedText.setText(CalenderController.getMonthInText(month));
         LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
-//        System.out.println(CalenderController.dateToMillis(startDay));
-//        System.out.println(CalenderController.dateToMillis(CalenderController.getLastDayInCalender(month)));
         BookingApplication.hentReservationer(CalenderController.dateToMillis(startDay), CalenderController.dateToMillis(CalenderController.getLastDayInCalender(month)));
         dates = BookingApplication.vtCont.fillVaskeTavle(startDay, null);
 

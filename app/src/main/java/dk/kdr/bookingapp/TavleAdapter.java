@@ -63,15 +63,15 @@ public class TavleAdapter extends BaseAdapter {
         textView.setText("Vaskerum " + (position + 1)); //Skriver hvilket vaskerum på elementerne
 
         //Går igennem reservationerne, og maler elementet grønt, hvis det er et rum ledigt
-        if(reservations.size() > 0) {
-            for (Reservation res : reservations) {
-                System.out.println("tavle id " + (res.getTavleID()-1) +"\nposition " + position);
-                if (res.getTavleID() - 1 == position) {
-                    textView.setBackgroundColor(Color.GREEN
-                    );
-                }
-            }
-        }
+//        if(reservations.size() >) {
+//            for (Reservation res : reservations) {
+//                System.out.println("tavle id " + (res.getTavleID()-1) +"\nposition " + position);
+//                if (res.getTavleID() - 1 == position) {
+//                    textView.setBackgroundColor(Color.GREEN
+//                    );
+//                }
+//            }
+//        }
         return gridView;
     }
 }
