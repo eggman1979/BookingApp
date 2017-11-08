@@ -27,11 +27,10 @@ import logik.VaskeTidController;
 public class VisVaskeDagActivity extends AppCompatActivity {
 
     ListView timeListe;
-    Button btn;
     List<VaskeTid> vTid;
     TextView datoText;
-    VaskeDag vd;
     boolean[] ledigeTider;
+    long dato;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,25 +43,26 @@ public class VisVaskeDagActivity extends AppCompatActivity {
         Intent i = getIntent();
         Bundle b = i.getExtras();
 
-        long dato = b.getLong("Dato");
+        dato = b.getLong("Dato");
+        System.out.println("Fra VisVaskeDagAktivitet - dato " + dato);
         ledigeTider = BookingApplication.vtCont.ledigeVaskeTider(dato);
-        vd = BookingApplication.vtCont.findVaskeDag(dato); // TODO Denne kan virke forkert, fordi at implementationen af findvaskedag ikke går igennem tavlerne
+        List<VaskeBlok> vBlokke = BookingApplication.vtCont.getvBlokke();
 
-        vTid = vd.getVasketider(); //TODO Det er meget arbejde at for at blok at ende nogle start tider fra en vaskeblok, hvis der er tid skal dette refaktoreres
 
-        System.out.println(vTid.get(0).getDato());
+
+
         String datoString = CalenderController.millisToDate(dato).toString();
         datoText.setText(datoString);
 
-        timeListe.setAdapter(new TimeListeAdapter(this, vd.getVasketider(), ledigeTider));
+        timeListe.setAdapter(new TimeListeAdapter(this,vBlokke, ledigeTider));
         timeListe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
 
-                long dato = vTid.get(position).getDato();
-                System.out.println(dato);
+               System.out.println("Fra VaskeDagAktivitet - setOnItem.... Dato " + dato);
+
                 Intent i = new Intent(getApplicationContext(), VisLedigeVaskerum.class);
                 i.putExtra("Dato", dato);
                 getApplicationContext().startActivity(i);

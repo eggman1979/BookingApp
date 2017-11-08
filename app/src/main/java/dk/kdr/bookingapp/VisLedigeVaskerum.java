@@ -20,20 +20,22 @@ public class VisLedigeVaskerum extends AppCompatActivity {
     ListView list;
     TextView blokText;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vis_ledige_vaskerum);
 
         Intent i = getIntent();
-        long dato = i.getLongExtra("dato", -1L);
-        List<VaskeTid> vTider = BookingApplication.vtCont.findVaskeTiderFraBlok(dato);
-
+        long dato = i.getLongExtra("Dato", -1L);
+        System.out.println(dato);
+        boolean[] ledigeRum = BookingApplication.vtCont.ledigeVaskerum(dato, 1);
+        System.out.println(ledigeRum);
 
         blokText = (TextView) findViewById(R.id.bloktid);
         list = (ListView) findViewById(R.id.vaskerum_liste);
-      //  blokText.setText("Grøn Lort");
-        TavleAdapter ta = new TavleAdapter(this, null, 3);
+        blokText.setText("Grøn Lort");
+        TavleAdapter ta = new TavleAdapter(this, ledigeRum);
 
         list.setAdapter(ta);
 

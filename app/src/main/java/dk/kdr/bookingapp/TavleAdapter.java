@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import data.Reservation;
+import data.VaskeTavle;
 
 /**
  * Created by KimdR on 30-10-2017.
@@ -20,19 +21,17 @@ import data.Reservation;
 public class TavleAdapter extends BaseAdapter {
 
     Context context;
-    List<Reservation> reservations;
-    int antalTavler;
+    boolean[] ledigeRum;
 
-    public TavleAdapter(Context context, List<Reservation> reservations, int antalTavler) {
+
+    public TavleAdapter(Context context, boolean[] ledigeRum) {
         this.context = context;
-        this.reservations = reservations;
-        this.antalTavler = antalTavler;
-
+        this.ledigeRum = ledigeRum;
     }
 
     @Override
     public int getCount() {
-        return antalTavler;
+        return ledigeRum.length;
     }
 
     @Override
@@ -62,16 +61,10 @@ public class TavleAdapter extends BaseAdapter {
         TextView textView = (TextView) gridView.findViewById(R.id.tavleid);
         textView.setText("Vaskerum " + (position + 1)); //Skriver hvilket vaskerum på elementerne
 
-        //Går igennem reservationerne, og maler elementet grønt, hvis det er et rum ledigt
-//        if(reservations.size() >) {
-//            for (Reservation res : reservations) {
-//                System.out.println("tavle id " + (res.getTavleID()-1) +"\nposition " + position);
-//                if (res.getTavleID() - 1 == position) {
-//                    textView.setBackgroundColor(Color.GREEN
-//                    );
-//                }
-//            }
-//        }
+       if(ledigeRum[position]){
+           textView.setBackgroundColor(Color.GREEN);
+
+       }
         return gridView;
     }
 }

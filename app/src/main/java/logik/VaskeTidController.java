@@ -25,6 +25,11 @@ public class VaskeTidController {
     private List<Reservation> reservations;
     private List<VaskeTavle> tavler;
     private List<VaskeDag> vaskeDage;
+
+    public List<VaskeBlok> getvBlokke() {
+        return vBlokke;
+    }
+
     private List<VaskeBlok> vBlokke;
     private boolean[] erDagLedig;
 
@@ -99,6 +104,7 @@ public class VaskeTidController {
     }
 
     public void setvBlokke(List<VaskeBlok> vBlokke) {
+
         this.vBlokke = vBlokke;
     }
 
@@ -123,7 +129,57 @@ public class VaskeTidController {
 
     }
 
+
+    /**
+     * Returerer en vaskedag per vasketavle der findes
+     *
+     * @param dato den dato vaskedagen skal foregå
+     * @return
+     */
+    public List<VaskeDag> findVaskeDag(long dato) {
+
+        List<VaskeDag> vDage = new ArrayList<>();
+        int index = -1;
+
+        for (VaskeTavle tavle : tavler) {
+            if (index != -1) {
+                vDage.add(tavle.getVaskeDage().get(index));
+            }
+            for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
+                VaskeDag vDag = tavle.getVaskeDage().get(i);
+                if (vDag.getVasketider().get(0).getDato() == dato) {
+                    index = i;
+                    vDage.add(tavle.getVaskeDage().get(index));
+                }
+            }
+        }
+
+        return vDage;
+    }
+
+    public boolean[] ledigeVaskerum(long dato, int blok) {
+
+        boolean[] ledigeRum = new boolean[tavler.size()];
+        int index = 0;
+
+        for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
+            if (getVaskeDage().get(i).getVasketider().get(0).getDato() == dato) {
+
+                index = i;
+            }
+        }
+
+        for (int i = 0; i < tavler.size(); i++) {
+            VaskeTavle tavle = tavler.get(i);
+            if (tavle.getVaskeDage().get(index).getVasketider().get(blok).getReservation() == null) {
+                ledigeRum[i] = true;
+            }
+        }
+        return ledigeRum;
+    }
+
     public boolean[] ledigeVaskeTider(long dato) {
+       // printAllReservations();
         boolean[] ledigeTider = new boolean[vBlokke.size()];
         int index = 0;
         for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
@@ -141,17 +197,14 @@ public class VaskeTidController {
         return ledigeTider;
     }
 
-    public VaskeDag findVaskeDag(long dato) {
-        for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
-            if (getVaskeDage().get(i).getVasketider().get(0).getDato() == dato) {
-                return vaskeDage.get(i);
-            }
+    public void printAllReservations() {
+        int i = 0;
+        for (VaskeTavle tavle : tavler) {
+             for(VaskeDag vDag: tavle.getVaskeDage()){
+                 for (VaskeTid vTid : vDag.getVasketider()  ) {
+                    System.out.println(vTid.getReservation() + " " + i++);
+                 }
+             }
         }
-        return null;
-    }
-    public List<VaskeTid> findVaskeTiderFraBlok(long dato){
-        List<VaskeTid> vList = new ArrayList<>();
-
-        return vList;
     }
 }

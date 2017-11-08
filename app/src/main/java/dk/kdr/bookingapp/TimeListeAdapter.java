@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import data.VaskeBlok;
 import data.VaskeTid;
 
 /**
@@ -25,11 +26,11 @@ public class TimeListeAdapter extends BaseAdapter {
 
 
     Context context;
-    List<VaskeTid> tider;
+    List<VaskeBlok> blokke;
     boolean[] ledigeTider;
 
-    public TimeListeAdapter(Context context, List<VaskeTid> tider, boolean[] ledigeTider){
-        this.tider = tider;
+    public TimeListeAdapter(Context context, List<VaskeBlok> blokke, boolean[] ledigeTider){
+        this.blokke = blokke;
         this.context = context;
         this.ledigeTider = ledigeTider;
 
@@ -38,7 +39,7 @@ public class TimeListeAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return tider.size();
+        return blokke.size();
     }
 
     @Override
@@ -65,10 +66,10 @@ public class TimeListeAdapter extends BaseAdapter {
       timeView = inflater.inflate( R.layout.time_item, null);
 
 
-        TextView textView = (TextView) timeView.findViewById(R.id.tid); //TODO grid_item_level
+        TextView textView = (TextView) timeView.findViewById(R.id.tid);
 
 
-            textView.setText(tider.get(position).getVaskeBlok().getStartTid()+":00");
+            textView.setText(blokke.get(position).getStartTid()+":00");
 
         if(ledigeTider[position]){
            textView.setBackgroundColor(Color.GREEN);

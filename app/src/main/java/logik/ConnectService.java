@@ -81,6 +81,8 @@ public class ConnectService extends Service {
                 if (resList != null && resList.size() > 0) {
                     Log.w("data fra server", resList.get(0).getBrugerID() + "  der er noget?");
                     BookingApplication.setReservation(resList);
+                }else{
+                    Log.w("Error", " Reservationerne er null" );
                 }
             }
         }).start();
@@ -126,14 +128,15 @@ public class ConnectService extends Service {
                 try {
 
                     URL url = new URL(baseURL + "vtService/vasketavler/1  ");//TODO Der skal et boligselskabs id med som parameter
-                    openServiceConnection(url);
+                 line =  openServiceConnection(url);
 
                     Gson gson = new Gson();
 
                     ArrayList<VaskeTavle> resList = gson.fromJson(line, new TypeToken<List<VaskeTavle>>() {
                     }.getType());
-                    Log.w("data fra server", resList.size() + "");
+
                     BookingApplication.vtCont.setVaskeTavler(resList);
+                    Log.w("VaskeTAVLER i vtCont", " Der er " + BookingApplication.vtCont.getVaskeTavler().size() );
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
