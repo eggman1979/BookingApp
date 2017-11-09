@@ -34,7 +34,7 @@ public class BookingApplication extends Application {
     public static ServiceConnection connection;
     public static ConnectService cService = null;
     public static boolean isBound = false;
-    public static Bruger bruger = new Bruger(1, 1, "Kim", 1); // Denne skal hentes enten fra server, eller skal være gemt lokalt i shared prefs
+    public static Bruger bruger = new Bruger(1, 1, "Kim", 1); // Denne skal hentes enten fra server, eller skal være gemt lokalt i serialiseret fil
     public static VaskeTidController vtCont;
 
 
@@ -47,8 +47,11 @@ public class BookingApplication extends Application {
         startBinding();
         Intent intent = new Intent(this, ConnectService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
-        initializeAppData();
-
+        if (bruger != null) {
+            initializeAppData();
+        }else{
+            //TODO Hvis brugeren er null, skal der logges ind, og der skal ikke auto initialiseres data
+        }
     }
 
     public void startBinding() {

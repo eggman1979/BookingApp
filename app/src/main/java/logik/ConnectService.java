@@ -13,6 +13,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 
+import org.joda.time.LocalDate;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +40,7 @@ import data.VaskeTavle;
 public class ConnectService extends Service {
 
     private final IBinder mBinder = new LocalBinder();
+    private boolean isFetchingDato = false;
 
     String baseURL = "http://192.168.0.13:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra
     //    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra
@@ -56,7 +59,12 @@ public class ConnectService extends Service {
         }
     }
 
+    public boolean isFetchingDato() {
+        return isFetchingDato;
+    }
+
     public void hentReservationer(final long startDato, final long slutDato, final int boligID) throws IOException { //TODO Der skal et boligselskabs id med som parameter
+        isFetchingDato = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -79,13 +87,19 @@ public class ConnectService extends Service {
                 ArrayList<Reservation> resList = gson.fromJson(line, new TypeToken<List<Reservation>>() {
                 }.getType());
                 if (resList != null && resList.size() > 0) {
-                    Log.w("data fra server", resList.get(0).getBrugerID() + "  der er noget?");
+                    Log.w("data fra server ", resList.get(0).getBrugerID() + "  der er noget?");
                     BookingApplication.setReservation(resList);
+                    for(Reservation res: resList){
+                        LocalDate dd = CalenderController.millisToDate(res.getDato());
+                        System.out.println(dd.toString() + " ReservationsID er " + res.getReservationID() + " VaskeBlok " + res.getvaskeBlokID());
+                    }
                 }else{
                     Log.w("Error", " Reservationerne er null" );
                 }
             }
         }).start();
+        isFetchingDato = false;
+
     }
 
     public void hentBoligforening(int boligforeningId) throws IOException {//TODO Der skal et boligselskabs id med som parameter

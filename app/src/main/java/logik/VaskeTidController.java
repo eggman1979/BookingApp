@@ -51,10 +51,7 @@ public class VaskeTidController {
 
         for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
 
-            // System.out.println("************************************************************");
             long dateInMilli = CalenderController.dateToMillis(startDag.plusDays(i));
-//            System.out.println("Datoen er " + startDag.plusDays(i));
-            //System.out.println("VT controller" + CalenderController.millisToDate(dateInMilli));
             int antalBlokke = vBlokke.size();
             List<VaskeTid> vTider = new ArrayList<>();
 
@@ -62,16 +59,15 @@ public class VaskeTidController {
 
 
                 VaskeTid vTid = new VaskeTid(dateInMilli, tavleId, vBlokke.get(j));
-                for (Reservation res : reservations) {
-//                    System.out.println("Reservation har datoen :" + CalenderController.millisToDate(res.getDato()));
-//                    System.out.println("Reservatoinen har vaskeblok nummer " + res.getvaskeBlokID() + " tavleID : " +res.getTavleID() + " j =" + j + " Dato = " + (res.getDato() == dateInMilli)); // && res.getTavleID() == tavleId));
-                    if (res.getvaskeBlokID() == (j + 1) && res.getDato() == dateInMilli && res.getTavleID() == tavleId) {
-                        vTid.setReservation(res);
-                        //            System.out.println("Der er blevet sat en reservation!!! " + i);
+                if (reservations != null) {
+                    for (Reservation res : reservations) {
 
+                        if (res.getvaskeBlokID() == (j + 1) && res.getDato() == dateInMilli && res.getTavleID() == tavleId) {
+                            vTid.setReservation(res);
+                        }
                     }
+                    vTider.add(vTid);
                 }
-                vTider.add(vTid);
             }
             VaskeDag vd = new VaskeDag(antalBlokke, vTider);
             vaskeDage.add(vd);
@@ -124,9 +120,7 @@ public class VaskeTidController {
                     }
                 }
             }
-            System.out.println("VaskeDag " + i + " = " + erDagLedig[i]);
         }
-
     }
 
 
@@ -179,7 +173,7 @@ public class VaskeTidController {
     }
 
     public boolean[] ledigeVaskeTider(long dato) {
-       // printAllReservations();
+        // printAllReservations();
         boolean[] ledigeTider = new boolean[vBlokke.size()];
         int index = 0;
         for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
@@ -200,11 +194,11 @@ public class VaskeTidController {
     public void printAllReservations() {
         int i = 0;
         for (VaskeTavle tavle : tavler) {
-             for(VaskeDag vDag: tavle.getVaskeDage()){
-                 for (VaskeTid vTid : vDag.getVasketider()  ) {
+            for (VaskeDag vDag : tavle.getVaskeDage()) {
+                for (VaskeTid vTid : vDag.getVasketider()) {
                     System.out.println(vTid.getReservation() + " " + i++);
-                 }
-             }
+                }
+            }
         }
     }
 }

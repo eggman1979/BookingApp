@@ -28,13 +28,15 @@ public class VisLedigeVaskerum extends AppCompatActivity {
 
         Intent i = getIntent();
         long dato = i.getLongExtra("Dato", -1L);
+        int blok = i.getIntExtra("Blok", -1);
+        VaskeBlok vBlok = BookingApplication.vtCont.getvBlokke().get(blok);
         System.out.println(dato);
         boolean[] ledigeRum = BookingApplication.vtCont.ledigeVaskerum(dato, 1);
         System.out.println(ledigeRum);
 
         blokText = (TextView) findViewById(R.id.bloktid);
         list = (ListView) findViewById(R.id.vaskerum_liste);
-        blokText.setText("Vaskerum");
+        blokText.setText("Vasketid: " + vBlok.getStartTid()+":00");
         TavleAdapter ta = new TavleAdapter(this, ledigeRum);
 
         list.setAdapter(ta);

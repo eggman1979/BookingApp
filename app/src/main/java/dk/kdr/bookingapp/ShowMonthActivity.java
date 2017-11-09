@@ -1,6 +1,8 @@
 package dk.kdr.bookingapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     TextView maanedText, prev, next;
     int month;
     VaskeTidController vs;
+    ProgressDialog pDiag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +47,6 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         vs.fillVaskeTavle(startDay, null);
 
 
-
-
         boolean landscape = getResources().getBoolean(R.bool.isLandscape);
         if (landscape) {
             setContentView(R.layout.activity_showmonth_landscape);
@@ -54,7 +55,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         }
 
 
-        dates = BookingApplication.vtCont.fillVaskeTavle(startDay, null);
+        dates = vs.fillVaskeTavle(startDay, null);
 
         gridView = (GridView) findViewById(R.id.gridView1);
 
@@ -98,9 +99,27 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
             month++;
         }
         maanedText.setText(CalenderController.getMonthInText(month));
-        LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
-        BookingApplication.hentReservationer(CalenderController.dateToMillis(startDay), CalenderController.dateToMillis(CalenderController.getLastDayInCalender(month)));
-        dates = BookingApplication.vtCont.fillVaskeTavle(startDay, null);
+        final LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
+
+        //Progress dialog vises, hvis der er lang loading tid
+        pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
+
+
+        //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                BookingApplication.hentReservationer(CalenderController.dateToMillis(startDay), CalenderController.dateToMillis(CalenderController.getLastDayInCalender(month)));
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                pDiag.dismiss();
+            }
+        }.execute();
+        dates = vs.fillVaskeTavle(startDay, null);
 
         gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig()));
 
