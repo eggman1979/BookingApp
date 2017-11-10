@@ -17,6 +17,7 @@ import java.util.List;
 
 import data.VaskeDag;
 import data.VaskeTavle;
+import logik.CalenderController;
 
 import static android.R.attr.start;
 
@@ -27,19 +28,22 @@ import static android.R.attr.start;
 
 public class CalenderView extends BaseAdapter {
 
+    String month = "";
     Context context;
     List<VaskeTavle> dates;
     private boolean[] erDagLedig;
+    private boolean isWeek;
 
-    public CalenderView(Context context, List<VaskeTavle> dates, boolean[] erDagLedig) {
+    public CalenderView(Context context, List<VaskeTavle> dates, boolean[] erDagLedig, boolean isWeek) {
         this.context = context;
         this.dates = dates;
         this.erDagLedig = erDagLedig;
+        this.isWeek = isWeek;
     }
 
     @Override
     public int getCount() {
-        return 42;
+        return erDagLedig.length;
     }
 
     @Override
@@ -55,6 +59,7 @@ public class CalenderView extends BaseAdapter {
 
     public View getView(final int position, View convertView, ViewGroup parent) {
 
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View gridView;
@@ -67,10 +72,15 @@ public class CalenderView extends BaseAdapter {
         gridView = inflater.inflate(R.layout.grid_item, null);
         TextView textView = (TextView) gridView.findViewById(R.id.grid_item_label);
 
-//      finder dato på baggrund af de reservationer der er sendt med, datoen vises i toppen af aktiviteten.
-        int date = new LocalDate(dates.get(0).getVaskeDage().get(position).getVasketider().get(0).getDato()).getDayOfMonth();
+////      finder dato på baggrund af de reservationer der er sendt med, datoen vises i toppen af aktiviteten.
+        LocalDate date = new LocalDate(dates.get(0).getVaskeDage().get(position).getVasketider().get(0).getDato());
+        int day = date.getDayOfMonth();
+//
+        if (isWeek) {
+            month = ". " +CalenderController.getMonthInText(date.getMonthOfYear());
+        }
+        textView.setText(day + month);
 
-        textView.setText(date + "");
 
 //        Check om vaskedagen er ledig, hvis den er , så males der grøn ellers rød
         if (erDagLedig[position]) {

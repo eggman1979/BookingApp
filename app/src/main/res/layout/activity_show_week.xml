@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
     android:orientation="vertical"
-    tools:context="dk.kdr.bookingapp.VisLedigeVaskerum">
+    tools:context="dk.kdr.bookingapp.ShowWeekActivity"
+    android:background="#000000">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
         <TableRow>
 
             <TextView
-                android:id="@+id/month_decrease"
+                android:id="@+id/prevWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -28,17 +28,17 @@
 
 
             <TextView
-                android:id="@+id/maaned_text"
+                android:id="@+id/currentWeek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="maanedNavn"
+                android:text="ugeNummer"
                 android:textColor="#999999"
                 android:textSize="35dp" />
 
             <TextView
-                android:id="@+id/month_increase"
+                android:id="@+id/nextWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -50,33 +50,9 @@
         </TableRow>
     </TableLayout>
 
-
-
-        <GridView
-            android:id="@+id/gridView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:horizontalSpacing="2dp"
-            android:numColumns="7"
-            android:verticalSpacing="2dp"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp" />
-    <LinearLayout
-
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_vertical"
-        android:layout_below="@id/gridView1">
+        android:id="@+id/weekList"/>
 
-        <TextView
-            android:id="@+id/showWeek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Skift til uge"
-            android:textColor="#999999"
-            android:textSize="25dp"
-            android:gravity="center_horizontal"/>
-    </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

@@ -31,6 +31,7 @@ public class BookingApplication extends Application {
     private static BookingApplication ourInstance = new BookingApplication();
     private ConnectService.LocalBinder binder;
 
+    public static boolean isMonth = false;
     public static ServiceConnection connection;
     public static ConnectService cService = null;
     public static boolean isBound = false;

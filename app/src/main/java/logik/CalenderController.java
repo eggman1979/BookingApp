@@ -2,6 +2,7 @@ package logik;
 
 import android.util.Log;
 
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -49,7 +50,6 @@ public class CalenderController {
         int difference = month - monthNow;
         LocalDate monthDate = first.plusMonths(difference);
 
-        Log.w("ttt", "getMonthInText: " + difference + " " + monthDate.toString());
         DateTimeFormatter formatter = DateTimeFormat.forPattern("MMMMM");
         String monthString = formatter.print(monthDate);
         return monthString.substring(0, 1).toUpperCase() + monthString.substring(1);
@@ -60,7 +60,22 @@ public class CalenderController {
         return getFirstMondayInCalender(month).plusDays(42);
     }
 
+    public static LocalDate getFirstDayOfWeek(int week) {
+        LocalDate startDag = new LocalDate().withWeekOfWeekyear(week).withDayOfWeek(1);
+        return startDag;
+    }
 
+    public static LocalDate getLastDayOfWeek(int week) {
+        LocalDate slutDag = new LocalDate().withWeekOfWeekyear(week).withDayOfWeek(7);
+        return slutDag;
+    }
+
+    public static int getDaysBetween(LocalDate start, LocalDate slut){
+        if(slut == null){
+            return 42; // antalDage i en kalender måned
+        }
+        return Days.daysBetween(start,slut).getDays()+1;
+    }
 
 
 }

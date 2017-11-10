@@ -31,7 +31,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
     List<VaskeTavle> dates;
     GridView gridView;
-    TextView maanedText, prev, next;
+    TextView maanedText, prev, next, week;
     int month;
     VaskeTidController vs;
     ProgressDialog pDiag;
@@ -40,6 +40,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         vs = BookingApplication.vtCont;
+        BookingApplication.isMonth = true;
 
         month = CalenderController.getToday().getMonthOfYear();
         LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
@@ -58,10 +59,10 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         dates = vs.fillVaskeTavle(startDay, null);
 
         gridView = (GridView) findViewById(R.id.gridView1);
-
         maanedText = (TextView) findViewById(R.id.maaned_text);
-
         maanedText.setText(CalenderController.getMonthInText(month));
+        week = (TextView) findViewById(R.id.showWeek);
+        week.setOnClickListener(this);
 
         prev = (TextView) findViewById(R.id.month_decrease);
         prev.setOnClickListener(this);
@@ -70,7 +71,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
 
         //TODO Der skal hentes den bruger der er logget ind i appen, og på baggrund af denne skal der findes boligselskab og tavle
-        gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig()));
+        gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig(),false));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -86,43 +87,49 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
                 getApplicationContext().startActivity(i);
             }
         });
-
     }
 
 
     @Override
     public void onClick(View v) {
+        int oldMonth = month;
         if (v == prev) {
             month--;
 
         } else if (v == next) {
             month++;
         }
-        maanedText.setText(CalenderController.getMonthInText(month));
-        final LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
+        else if(v == week){
+            Intent i = new Intent(this, ShowWeekActivity.class);
+            startActivity(i);
+        }
 
-        //Progress dialog vises, hvis der er lang loading tid
-        pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
+        if(oldMonth != month) {
+            maanedText.setText(CalenderController.getMonthInText(month));
+            final LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
+
+            //Progress dialog vises, hvis der er lang loading tid
+            pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
 
 
-        //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                BookingApplication.hentReservationer(CalenderController.dateToMillis(startDay), CalenderController.dateToMillis(CalenderController.getLastDayInCalender(month)));
-                return null;
-            }
+            //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... params) {
+                    BookingApplication.hentReservationer(CalenderController.dateToMillis(startDay), CalenderController.dateToMillis(CalenderController.getLastDayInCalender(month)));
+                    return null;
+                }
 
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                pDiag.dismiss();
-            }
-        }.execute();
-        dates = vs.fillVaskeTavle(startDay, null);
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+                    pDiag.dismiss();
+                }
+            }.execute();
+            dates = vs.fillVaskeTavle(startDay, null);
 
-        gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig()));
-
+            gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig(), false));
+        }
     }
 }
 
