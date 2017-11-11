@@ -45,6 +45,9 @@ public class VisVaskeDagActivity extends AppCompatActivity {
 
         dato = b.getLong("Dato");
         System.out.println("Fra VisVaskeDagAktivitet - dato " + dato);
+
+        BookingApplication.hentReservationer(dato,dato);
+
         ledigeTider = BookingApplication.vtCont.ledigeVaskeTider(dato, BookingApplication.isMonth);
         List<VaskeBlok> vBlokke = BookingApplication.vtCont.getvBlokke();
 

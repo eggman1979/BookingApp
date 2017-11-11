@@ -25,6 +25,10 @@ import static org.joda.time.Days.daysBetween;
 
 public class VaskeTidController {
 
+    final int DAG = 1;
+    final int UGE = 7;
+    final int MAANED = 42;
+
     private List<Reservation> reservations;
     private List<VaskeTavle> tavler;
     private List<VaskeDag> vaskeDage;
@@ -113,7 +117,7 @@ public class VaskeTidController {
     }
 
 
-    public void opretLedighedsTabel(int antalDage) {
+    public boolean[] opretLedighedsTabel(int antalDage) {
         erDagLedig = new boolean[antalDage];
         System.out.println("*********** " + antalDage + " fra opretLedighedsTabel() **********");
         /*
@@ -131,6 +135,7 @@ public class VaskeTidController {
             }
         }
         System.out.println("*********** " + antalDage + " fra opretLedighedsTabel() **********");
+        return erDagLedig;
     }
 
 

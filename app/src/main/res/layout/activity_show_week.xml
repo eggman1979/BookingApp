@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,7 +11,7 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/gridView1"
+        android:layout_above="@+id/weekList"
         android:columnCount="3"
         android:paddingBottom="10dp">
 
@@ -53,6 +53,17 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:id="@+id/weekList"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/monthView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Skift til måned"
+        android:textColor="#999999"
+        android:textSize="25dp"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/weekList"/>
+
+</RelativeLayout>

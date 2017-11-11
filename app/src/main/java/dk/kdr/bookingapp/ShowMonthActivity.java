@@ -36,6 +36,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     VaskeTidController vs;
     ProgressDialog pDiag;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +44,28 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         BookingApplication.isMonth = true;
 
         month = CalenderController.getToday().getMonthOfYear();
-        LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
+        final LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
         System.out.println("activity " + startDay.toString());
-        vs.fillVaskeTavle(startDay, null);
 
+        pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
 
+        //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                BookingApplication.hentReservationer(CalenderController.dateToMillis(startDay), CalenderController.dateToMillis(CalenderController.getLastDayInCalender(month)));
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                pDiag.dismiss();
+
+            }
+        }.execute();
+
+        dates = vs.fillVaskeTavle(startDay, null);
         boolean landscape = getResources().getBoolean(R.bool.isLandscape);
         if (landscape) {
             setContentView(R.layout.activity_showmonth_landscape);
@@ -55,8 +73,6 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
             setContentView(R.layout.activity_showmonth);
         }
 
-
-        dates = vs.fillVaskeTavle(startDay, null);
 
         gridView = (GridView) findViewById(R.id.gridView1);
         maanedText = (TextView) findViewById(R.id.maaned_text);
@@ -71,12 +87,16 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
 
         //TODO Der skal hentes den bruger der er logget ind i appen, og på baggrund af denne skal der findes boligselskab og tavle
-        gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig(),false));
+        gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig(), false));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
+                if (vs.getErDagLedig().length == 7) {
+                    BookingApplication.isMonth = true;
+                    vs.fillVaskeTavle(startDay, null);
+                }
                 VaskeDag vDag = dates.get(0).getVaskeDage().get(position);
                 long dato = vDag.getVasketider().get(0).getDato();
                 Intent i = new Intent(getApplicationContext(), VisVaskeDagActivity.class);
@@ -98,13 +118,12 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
         } else if (v == next) {
             month++;
-        }
-        else if(v == week){
+        } else if (v == week) {
             Intent i = new Intent(this, ShowWeekActivity.class);
             startActivity(i);
         }
 
-        if(oldMonth != month) {
+        if (oldMonth != month) {
             maanedText.setText(CalenderController.getMonthInText(month));
             final LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
 

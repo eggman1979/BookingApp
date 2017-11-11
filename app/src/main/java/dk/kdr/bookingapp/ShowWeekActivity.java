@@ -21,11 +21,11 @@ import logik.BookingApplication;
 import logik.CalenderController;
 import logik.VaskeTidController;
 
-public class ShowWeekActivity extends AppCompatActivity {
+public class ShowWeekActivity extends AppCompatActivity implements View.OnClickListener {
 
     int week = 0;
     ListView weekList;
-    TextView prevWeek, currentWeek, nextWeek;
+    TextView prevWeek, currentWeek, nextWeek, changeToMonth;
     VaskeTidController vtc;
     List<VaskeTavle> tavler;
     ProgressDialog pDiag;
@@ -41,6 +41,8 @@ public class ShowWeekActivity extends AppCompatActivity {
         prevWeek = (TextView) findViewById(R.id.prevWeek);
         currentWeek = (TextView) findViewById(R.id.currentWeek);
         nextWeek = (TextView) findViewById(R.id.nextWeek);
+        changeToMonth = (TextView) findViewById(R.id.monthView);
+        changeToMonth.setOnClickListener(this);
 
 
         week = CalenderController.getToday().getWeekOfWeekyear();
@@ -70,12 +72,12 @@ public class ShowWeekActivity extends AppCompatActivity {
         tavler = vtc.fillVaskeTavle(startDag, slutDato);
         int check = 0;
         for (VaskeTavle tavle : tavler) {
-            for(VaskeDag dag : tavle.getVaskeDage())
-                for(VaskeTid tid : dag.getVasketider())
-                    if(tid. getReservation() != null){
+            for (VaskeDag dag : tavle.getVaskeDage())
+                for (VaskeTid tid : dag.getVasketider())
+                    if (tid.getReservation() != null) {
                         System.out.println(check++);
 
-            }
+                    }
         }
         System.out.println("Antallet af tavler er " + tavler.size() + "; antallet af vaskedage: " + vtc.getErDagLedig().length);
 
@@ -97,5 +99,21 @@ public class ShowWeekActivity extends AppCompatActivity {
                 getApplicationContext().startActivity(i);
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == changeToMonth) {
+            BookingApplication.isMonth = true;
+            Intent i = new Intent(this, ShowMonthActivity.class);
+            startActivity(i);
+        }
+        else if(v == prevWeek){
+                week--;
+        }
+        else if(v == nextWeek){
+            week++;
+        }
+
     }
 }
