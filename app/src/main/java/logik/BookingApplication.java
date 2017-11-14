@@ -37,9 +37,11 @@ public class BookingApplication extends Application {
     public static boolean isBound = false;
     public static Bruger bruger = new Bruger(1, 1, "Kim", 1); // Denne skal hentes enten fra server, eller skal være gemt lokalt i serialiseret fil
     public static VaskeTidController vtCont;
-
+    private static boolean isDataLoadedFromServer = false;
+    private static boolean isDataLoadedFromDisc = false;
 
 //    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
 
     @Override
     public void onCreate() {
@@ -50,7 +52,7 @@ public class BookingApplication extends Application {
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
         if (bruger != null) {
             initializeAppData();
-        }else{
+        } else {
             //TODO Hvis brugeren er null, skal der logges ind, og der skal ikke auto initialiseres data
         }
     }
@@ -88,11 +90,22 @@ public class BookingApplication extends Application {
             public void run() {
                 if (BookingApplication.isBound) {
                     try {
-                        cService.hentReservationer(CalenderController.dateToMillis(CalenderController.getFirstMondayInCalender(LocalDate.now().getMonthOfYear())), CalenderController.dateToMillis(CalenderController.getLastDayInCalender(LocalDate.now().getMonthOfYear())), bruger.getBoligForeningID());
+                        cService.hentGemtReservation("res");
+                        System.out.println("Der er nu hentet og størrelesn er : " + vtCont.getReservations().size());
+//
+//
+                        Long sidstHentet = vtCont.getSidstHentet();
+                        System.out.println("SidstHentet er " + sidstHentet);
+////
+                        cService.hentReservationer(bruger.getBoligForeningID(),sidstHentet);
+                        Thread.sleep(100);
                         Thread.sleep(100); //Har indsat sleep for ikke at spamme Servicen for meget.
                         cService.hentVaskeTavler();
                         Thread.sleep(100);
                         cService.hentVaskeBlokke();
+                        isDataLoadedFromServer = true;
+
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -103,6 +116,25 @@ public class BookingApplication extends Application {
                 }
             }
         }, 100);
+
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isDataLoadedFromServer) {
+                    vtCont.cleanReservation();
+
+                    System.out.println("DATA GEMMES");
+                    cService.gemData(vtCont.getReservations(), "res");
+                    cService.gemData(vtCont.getVaskeTavler(), "tavler");
+                    cService.gemData(vtCont.getvBlokke(), "blokke");
+
+                    System.out.println("Antal reservationer efter rens = " + vtCont.getReservations().size());
+                } else {
+                    h.postDelayed(this, 100);
+                }
+            }
+        }, 100);
+
     }
 
     public static void setReservation(List<Reservation> reservations) {
@@ -116,7 +148,7 @@ public class BookingApplication extends Application {
             public void run() {
                 if (BookingApplication.isBound) {
                     try {
-                        cService.hentReservationer(startDato, slutDato, bruger.getBoligForeningID());
+                        cService.hentReservationer(bruger.getBoligForeningID(), vtCont.getSidstHentet());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

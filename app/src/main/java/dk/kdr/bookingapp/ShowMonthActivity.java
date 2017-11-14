@@ -41,7 +41,8 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         vs = BookingApplication.vtCont;
-        BookingApplication.isMonth = true;
+        boolean[] erDagLedig = vs.getErDagLedig();
+
 
         month = CalenderController.getToday().getMonthOfYear();
         final LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
@@ -66,6 +67,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         }.execute();
 
         dates = vs.fillVaskeTavle(startDay, null);
+        BookingApplication.isMonth = true;
         boolean landscape = getResources().getBoolean(R.bool.isLandscape);
         if (landscape) {
             setContentView(R.layout.activity_showmonth_landscape);
@@ -146,6 +148,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
                 }
             }.execute();
             dates = vs.fillVaskeTavle(startDay, null);
+            BookingApplication.isMonth = true;
 
             gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig(), false));
         }

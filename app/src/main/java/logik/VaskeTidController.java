@@ -25,9 +25,11 @@ import static org.joda.time.Days.daysBetween;
 
 public class VaskeTidController {
 
-    final int DAG = 1;
-    final int UGE = 7;
-    final int MAANED = 42;
+    public VaskeTidController() {
+        reservations = new ArrayList<>();
+        tavler = new ArrayList<>();
+        vBlokke = new ArrayList<>();
+    }
 
     private List<Reservation> reservations;
     private List<VaskeTavle> tavler;
@@ -123,19 +125,25 @@ public class VaskeTidController {
         /*
         Følgende loop skal gå igennem alle dage, og checke om der findes en vasketid, dette skal gøre på alle tavler, med reservation == null, i såfald skal pågældende felt i erDagLedig arrayet vendes til at være sandt
          */
-        for (int i = 0; i < antalDage; i++) {
-            for (int j = 0; j < vBlokke.size(); j++) {
-                for (int k = 0; k < tavler.size(); k++) {
-                    if (tavler.get(k).getVaskeDage().get(i).getVasketider().get(j).getReservation() == null) {
-                        erDagLedig[i] = true;
+
+        if (tavler != null && tavler.size() > 0) {
+            for (int i = 0; i < antalDage; i++) {
+                for (int j = 0; j < vBlokke.size(); j++) {
+                    for (int k = 0; k < tavler.size(); k++) {
+                        if (tavler.get(k).getVaskeDage().get(i).getVasketider().get(j).getReservation() == null) {
+                            erDagLedig[i] = true;
 
 
+                        }
                     }
                 }
             }
+            System.out.println("*********** " + antalDage + " fra opretLedighedsTabel() **********");
+            return erDagLedig;
+        } else {
+            System.out.println("Tavler er  null");
+            return null;
         }
-        System.out.println("*********** " + antalDage + " fra opretLedighedsTabel() **********");
-        return erDagLedig;
     }
 
 
@@ -168,19 +176,29 @@ public class VaskeTidController {
 
     public boolean[] ledigeVaskerum(long dato, int blok) {
 
+        int antalDage = 42;
+        if(!BookingApplication.isMonth){
+            antalDage = 7;
+        }
         boolean[] ledigeRum = new boolean[tavler.size()];
         int index = 0;
 
-        for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
-            if (getVaskeDage().get(i).getVasketider().get(0).getDato() == dato) {
 
+        LocalDate date = new LocalDate(dato);
+        System.out.println("Datoen er " + date.toString());
+        for (int i = 0; i < antalDage; i++) {
+            if (tavler.get(0).getVaskeDage().get(i).getVasketider().get(0).getDato() == dato) {
                 index = i;
+                break;
             }
         }
 
         for (int i = 0; i < tavler.size(); i++) {
             VaskeTavle tavle = tavler.get(i);
+System.out.println("Debug: BLokken er " + blok);
             if (tavle.getVaskeDage().get(index).getVasketider().get(blok).getReservation() == null) {
+
+                System.out.println("Debug: datoen er " + tavle.getVaskeDage().get(3).getVasketider().get(0).getReservation().getReservationID() );
                 ledigeRum[i] = true;
             }
         }
@@ -212,6 +230,13 @@ public class VaskeTidController {
         return ledigeTider;
     }
 
+    public void addReservations(List<Reservation> res) {
+        reservations.addAll(res);
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
 //    public void printAllReservations() {
 //        int i = 0;
 //        for (VaskeTavle tavle : tavler) {
@@ -222,4 +247,41 @@ public class VaskeTidController {
 //            }
 //        }
 //    }
+
+    public long getSidstHentet() {
+        long sidstHentet = 0;
+        if (reservations.size() > 0) {
+            for (Reservation r : reservations) {
+           //    System.out.println(r.toString());
+                if (r.getTilfoejetDato() > sidstHentet) {
+                    sidstHentet = r.getTilfoejetDato();
+
+                }
+            }
+        }
+
+        return sidstHentet+1;
+    }
+
+    public  void cleanReservation() {
+        List<Reservation> tempList = new ArrayList<>();
+        int count = 0;
+        System.out.println("Reservationer inden rens:" + reservations.size());
+        for(Reservation res : reservations){
+            for(Reservation res2: reservations){
+                if(res.getReservationID() == res2.getReservationID()){
+                    if(res.getTilfoejetDato() < res2.getTilfoejetDato()){
+                        tempList.add(res);
+                        count++;
+                    }
+                }
+            }
+
+        }
+        System.out.println("Count i renseMetoder er " + count);
+        for (Reservation res : tempList) {
+             reservations.remove(res);
+        }
+
+    }
 }
