@@ -33,7 +33,7 @@ public class VisLedigeVaskerum extends AppCompatActivity {
         System.out.println(dato);
         boolean[] ledigeRum = BookingApplication.vtCont.ledigeVaskerum(dato, blok);
         System.out.println(ledigeRum);
-//
+
         blokText = (TextView) findViewById(R.id.bloktid);
         list = (ListView) findViewById(R.id.vaskerum_liste);
         blokText.setText("Vasketid: " + vBlok.getStartTid()+":00");

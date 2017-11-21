@@ -2,6 +2,7 @@ package dk.kdr.bookingapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,11 +23,13 @@ import java.util.List;
 import data.VaskeDag;
 
 import data.VaskeTavle;
+import logik.AsyncData;
 import logik.BookingApplication;
 import logik.CalenderController;
+import logik.Callback;
 import logik.VaskeTidController;
 
-public class ShowMonthActivity extends AppCompatActivity implements View.OnClickListener {
+public class ShowMonthActivity extends AppCompatActivity implements View.OnClickListener, Callback {
 
 
     List<VaskeTavle> dates;
@@ -34,40 +37,21 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     TextView maanedText, prev, next, week;
     int month;
     VaskeTidController vs;
+    LocalDate startDay;
     ProgressDialog pDiag;
+    boolean[] erDagLedig;
+
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        vs = BookingApplication.vtCont;
-        boolean[] erDagLedig = vs.getErDagLedig();
 
+        vs = BookingApplication.vtCont;
 
         month = CalenderController.getToday().getMonthOfYear();
-        final LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
+        startDay = CalenderController.getFirstMondayInCalender(month);
         System.out.println("activity " + startDay.toString());
-
-        pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
-
-        //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                BookingApplication.hentReservationer(CalenderController.dateToMillis(startDay), CalenderController.dateToMillis(CalenderController.getLastDayInCalender(month)));
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                pDiag.dismiss();
-
-            }
-        }.execute();
-
-        dates = vs.fillVaskeTavle(startDay, null);
-        BookingApplication.isMonth = true;
         boolean landscape = getResources().getBoolean(R.bool.isLandscape);
         if (landscape) {
             setContentView(R.layout.activity_showmonth_landscape);
@@ -76,9 +60,13 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         }
 
 
+        //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
+        pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
+        new AsyncData(this, pDiag).execute();
+
         gridView = (GridView) findViewById(R.id.gridView1);
         maanedText = (TextView) findViewById(R.id.maaned_text);
-        maanedText.setText(CalenderController.getMonthInText(month));
+
         week = (TextView) findViewById(R.id.showWeek);
         week.setOnClickListener(this);
 
@@ -88,8 +76,14 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         next.setOnClickListener(this);
 
 
-        //TODO Der skal hentes den bruger der er logget ind i appen, og på baggrund af denne skal der findes boligselskab og tavle
-        gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig(), false));
+        BookingApplication.isMonth = true;
+
+        gridView = (GridView) findViewById(R.id.gridView1);
+        maanedText = (TextView) findViewById(R.id.maaned_text);
+        maanedText.setText(CalenderController.getMonthInText(month));
+
+
+
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -152,6 +146,34 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
             gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig(), false));
         }
+    }
+
+    @Override
+    public void onEventCompleted() {
+
+        //TODO Der skal hentes den bruger der er logget ind i appen, og på baggrund af denne skal der findes boligselskab og tavle
+
+        dates = vs.fillVaskeTavle(startDay, null);
+        erDagLedig = vs.getErDagLedig();
+
+        BookingApplication.isMonth = true;
+
+        gridView = (GridView) findViewById(R.id.gridView1);
+
+
+
+        gridView.setAdapter(new CalenderView(this, dates, erDagLedig, false));
+
+
+
+
+
+
+    }
+
+    @Override
+    public void onEventFailed() {
+
     }
 }
 

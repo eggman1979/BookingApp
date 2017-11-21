@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -33,7 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import data.Account;
 import data.BoligForening;
+import data.Bruger;
 import data.Reservation;
 import data.VaskeBlok;
 import data.VaskeTavle;
@@ -46,7 +49,7 @@ import data.VaskeTavle;
 public class ConnectService extends Service {
 
     private final IBinder mBinder = new LocalBinder();
-    private boolean isFetchingDato = false;
+
 
     String baseURL = "http://192.168.0.13:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Hjemmenet
 //    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // telefon
@@ -58,6 +61,34 @@ public class ConnectService extends Service {
         return mBinder;
     }
 
+    public Bruger login(final String userName, final String password, final String foreningID) {
+        BookingApplication.isBrugerSet = false;
+
+        String line = "";
+        InputStream is = null;
+
+        try {
+
+            URL url = new URL(baseURL + "brService/brugere/login/" + userName + "/" + password + "/" + foreningID);
+            line = openServiceConnection(url);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Gson gson = new Gson();
+
+        Bruger hentetBruger = gson.fromJson(line, Bruger.class);
+        BookingApplication.bruger = hentetBruger;
+        BookingApplication.isBrugerSet = true;
+        BookingApplication.persistent.gemData(hentetBruger, "bruger");
+
+        return hentetBruger;
+    }
+
+
+
     class LocalBinder extends Binder {
         ConnectService getService() {
             // Return this instance of LocalService so clients can call public methods
@@ -65,21 +96,18 @@ public class ConnectService extends Service {
         }
     }
 
-    public boolean isFetchingDato() {
-        return isFetchingDato;
-    }
 
     public void hentReservationer(final int boligID, final long sidstHentet) throws IOException { //TODO Der skal et boligselskabs id med som parameter
-        isFetchingDato = true;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
                 String line = "";
                 InputStream is = null;
 
                 try {
-
+                    
                     URL url = new URL(baseURL + "reservationService/reservationer/" + boligID + "/" + sidstHentet);
                     line = openServiceConnection(url);
 
@@ -103,16 +131,16 @@ public class ConnectService extends Service {
                     Log.w("Error", " Reservationerne er null");
                 }
             }
-        }).start();
-        isFetchingDato = false;
+//        }).start();
 
-    }
+
+//    }
 
     public void hentBoligforening(int boligforeningId) throws IOException {//TODO Der skal et boligselskabs id med som parameter
         final String urlExtend = "bfService/boligforeninger/" + boligforeningId;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
                 InputStream is = null;
                 String line = "";
 
@@ -130,16 +158,16 @@ public class ConnectService extends Service {
                 Gson gson = new Gson();
                 BoligForening resList = gson.fromJson(line, BoligForening.class);
                 Log.w("data fra server", resList.getNavn() + "  der er noget?");
-            }
-
-
-        }).start();
+//            }
+//
+//
+//        }).start();
     }
 
     public void hentVaskeTavler() throws IOException {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
 
                 String line = "";
@@ -165,13 +193,13 @@ public class ConnectService extends Service {
 
 
             }
-        }).start();
-    }
+//        }).start();
+//    }
 
     public void hentVaskeBlokke() throws IOException { //TODO Der skal et boligselskabs id med som parameter
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
 
                 String line = "";
@@ -192,8 +220,8 @@ public class ConnectService extends Service {
                     e.printStackTrace();
                 }
             }
-        }).start();
-    }
+//        }).start();
+//    }
 
     public String openServiceConnection(URL url) {
         String line = "";
@@ -230,30 +258,7 @@ public class ConnectService extends Service {
         return line;
     }
 
-    public void gemData(final Object objects, String filNavn) {
-        final String FILNAVN = this.getFilesDir() + "/" + filNavn + ".ser";
-        System.out.println(FILNAVN);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(FILNAVN + " Slettes");
-                File file = new File(FILNAVN);
-                file.delete();
 
-
-                try {
-                    FileOutputStream fileOutputStream = new FileOutputStream(FILNAVN);
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-                    objectOutputStream.writeObject(objects);
-                    objectOutputStream.close();
-                    fileOutputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-    }
 
     public void hentData() {
 

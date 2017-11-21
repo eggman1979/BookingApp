@@ -177,7 +177,7 @@ public class VaskeTidController {
     public boolean[] ledigeVaskerum(long dato, int blok) {
 
         int antalDage = 42;
-        if(!BookingApplication.isMonth){
+        if (!BookingApplication.isMonth) {
             antalDage = 7;
         }
         boolean[] ledigeRum = new boolean[tavler.size()];
@@ -195,10 +195,10 @@ public class VaskeTidController {
 
         for (int i = 0; i < tavler.size(); i++) {
             VaskeTavle tavle = tavler.get(i);
-System.out.println("Debug: BLokken er " + blok);
+            System.out.println("Debug: BLokken er " + blok);
             if (tavle.getVaskeDage().get(index).getVasketider().get(blok).getReservation() == null) {
 
-                System.out.println("Debug: datoen er " + tavle.getVaskeDage().get(3).getVasketider().get(0).getReservation().getReservationID() );
+                System.out.println("Debug: datoen er " + tavle.getVaskeDage().get(3).getVasketider().get(0).getReservation().getReservationID());
                 ledigeRum[i] = true;
             }
         }
@@ -252,7 +252,7 @@ System.out.println("Debug: BLokken er " + blok);
         long sidstHentet = 0;
         if (reservations.size() > 0) {
             for (Reservation r : reservations) {
-           //    System.out.println(r.toString());
+                //    System.out.println(r.toString());
                 if (r.getTilfoejetDato() > sidstHentet) {
                     sidstHentet = r.getTilfoejetDato();
 
@@ -260,17 +260,17 @@ System.out.println("Debug: BLokken er " + blok);
             }
         }
 
-        return sidstHentet+1;
+        return sidstHentet + 1;
     }
 
-    public  void cleanReservation() {
+    public void cleanReservation() {
         List<Reservation> tempList = new ArrayList<>();
         int count = 0;
         System.out.println("Reservationer inden rens:" + reservations.size());
-        for(Reservation res : reservations){
-            for(Reservation res2: reservations){
-                if(res.getReservationID() == res2.getReservationID()){
-                    if(res.getTilfoejetDato() < res2.getTilfoejetDato()){
+        for (Reservation res : reservations) {
+            for (Reservation res2 : reservations) {
+                if (res.getReservationID() == res2.getReservationID()) {
+                    if (res.getTilfoejetDato() < res2.getTilfoejetDato()) {
                         tempList.add(res);
                         count++;
                     }
@@ -280,7 +280,7 @@ System.out.println("Debug: BLokken er " + blok);
         }
         System.out.println("Count i renseMetoder er " + count);
         for (Reservation res : tempList) {
-             reservations.remove(res);
+            reservations.remove(res);
         }
 
     }
