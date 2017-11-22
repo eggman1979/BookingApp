@@ -198,7 +198,7 @@ public class VaskeTidController {
             System.out.println("Debug: BLokken er " + blok);
             if (tavle.getVaskeDage().get(index).getVasketider().get(blok).getReservation() == null) {
 
-                System.out.println("Debug: datoen er " + tavle.getVaskeDage().get(3).getVasketider().get(0).getReservation().getReservationID());
+
                 ledigeRum[i] = true;
             }
         }

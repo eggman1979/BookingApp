@@ -3,6 +3,8 @@ package dk.kdr.bookingapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,20 +17,20 @@ import data.VaskeDag;
 import data.VaskeTid;
 import logik.BookingApplication;
 
-public class VisLedigeVaskerum extends AppCompatActivity {
+public class VisLedigeVaskerum extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
     ListView list;
     TextView blokText;
-
-
+    long dato;
+    int blok;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vis_ledige_vaskerum);
 
         Intent i = getIntent();
-        long dato = i.getLongExtra("Dato", -1L);
-        int blok = i.getIntExtra("Blok", -1);
+        dato = i.getLongExtra("Dato", -1L);
+        blok = i.getIntExtra("Blok", -1);
         VaskeBlok vBlok = BookingApplication.vtCont.getvBlokke().get(blok);
         System.out.println(dato);
         boolean[] ledigeRum = BookingApplication.vtCont.ledigeVaskerum(dato, blok);
@@ -37,10 +39,26 @@ public class VisLedigeVaskerum extends AppCompatActivity {
         blokText = (TextView) findViewById(R.id.bloktid);
         list = (ListView) findViewById(R.id.vaskerum_liste);
         blokText.setText("Vasketid: " + vBlok.getStartTid()+":00");
+
         TavleAdapter ta = new TavleAdapter(this, ledigeRum);
 
         list.setAdapter(ta);
+        list.setOnItemClickListener(this);
 
 
+    }
+
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        System.out.println("DU HAR TRYKKET PÅ " + position);
+        Intent i = new Intent(this, ReserverTidAktivitet.class );
+        Bundle b = new Bundle();
+        b.putLong("dato", dato);
+        b.putInt("blok", blok); // Måske plus 1?
+        b.putInt("rum", position+1);
+        i.putExtras(b);
+        startActivity(i);
     }
 }

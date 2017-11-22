@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 import data.Account;
+import data.BoligForening;
 import data.Bruger;
 import data.Reservation;
 
@@ -23,7 +24,8 @@ import data.Reservation;
 public class BookingApplication extends Application {
 
     private static BookingApplication ourInstance = new BookingApplication();
-    public static boolean isBrugerSet =false;
+    public static boolean isBrugerSet = false;
+    public static BoligForening boligForening = null;
     private ConnectService.LocalBinder binder;
 
     public static boolean isMonth = false;
@@ -47,6 +49,7 @@ public class BookingApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+
         prefs = getSharedPreferences("init", 0);
         prefEditor = prefs.edit();
 
@@ -60,26 +63,39 @@ public class BookingApplication extends Application {
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
         vtCont = new VaskeTidController();
         if (isBrugerSet) {
-            final Handler h = new Handler();
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (isBound) {
-                        System.out.println("LOADES");
-                        BookingApplication.bruger = (Bruger) persistent.hentGemtFil("bruger");
-                        BookingApplication.account = (Account) persistent.hentGemtFil("account");
-                        isBrugerLoaded = bruger != null && account != null;
 
-                    } else {
-                        h.postDelayed(this, 100);
-                    }
+            try {
+                System.out.println("LOADES");
+
+                BookingApplication.bruger = (Bruger) persistent.hentGemtFil("bruger");
+                if (BookingApplication.bruger != null) {
+                    System.out.println("Bruger: Check");
                 }
 
-            }, 100);
+                BookingApplication.account = (Account) persistent.hentGemtFil("account");
+
+                if (BookingApplication.account != null) {
+                    System.out.println("Account: Check");
+                }
+
+                BookingApplication.boligForening = (BoligForening) persistent.hentGemtFil("boligforening");
+
+                if (BookingApplication.boligForening != null) {
+                    System.out.println("forening: Check");
+                }
+                Thread.sleep(10);
+                isBrugerLoaded = bruger != null && account != null && boligForening != null;
+                System.out.println("Er bruger dataloaded : " + isBrugerLoaded);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
 
-//        //TODO His brugeren er null, skal der logges ind, og der skal ikke auto initialiseres data
     }
+
+
+//        //TODO His brugeren er null, skal der logges ind, og der skal ikke auto initialiseres data
 
 
     public void startBinding() {

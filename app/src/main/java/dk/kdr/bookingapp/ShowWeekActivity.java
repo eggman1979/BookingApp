@@ -49,26 +49,9 @@ public class ShowWeekActivity extends AppCompatActivity implements View.OnClickL
         final LocalDate startDag = CalenderController.getFirstDayOfWeek(week);
         final LocalDate slutDato = CalenderController.getLastDayOfWeek(week);
 
-        pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
 
         //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
 
-                System.out.println("ASKYNK I UGEAKTIVITET før KALD *" + vtc.getVaskeTavler().get(0).getVaskeDage().size());
-                BookingApplication.hentReservationer(CalenderController.dateToMillis(startDag), CalenderController.dateToMillis(slutDato));
-
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                pDiag.dismiss();
-            }
-        }.execute();
         tavler = vtc.fillVaskeTavle(startDag, slutDato);
         int check = 0;
         for (VaskeTavle tavle : tavler) {

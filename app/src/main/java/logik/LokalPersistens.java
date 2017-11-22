@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import data.Account;
+import data.BoligForening;
 import data.Bruger;
 
 /**
@@ -18,7 +19,8 @@ import data.Bruger;
 
 public class LokalPersistens {
 
-Context context;
+    Context context;
+
     public LokalPersistens(Context context) {
         this.context = context;
     }
@@ -26,25 +28,35 @@ Context context;
     public Object hentGemtFil(String filNavn) {
         String FILNAVN = context.getFilesDir() + "/" + filNavn + ".ser";
         Bruger bruger = null;
+        FileInputStream fileOutputStream;
+        ObjectInputStream inputStream = null;
         try {
-            FileInputStream fileOutputStream = new FileInputStream(FILNAVN);
-            ObjectInputStream inputStream = new ObjectInputStream(fileOutputStream);
-            if(filNavn.equals("bruger")){
+            fileOutputStream = new FileInputStream(FILNAVN);
+            inputStream = new ObjectInputStream(fileOutputStream);
+            if (filNavn.equals("bruger")) {
                 bruger = (Bruger) inputStream.readObject();
                 return bruger;
-            }
-            else if( filNavn.equals("account")){
+            } else if (filNavn.equals("account")) {
                 Account account = (Account) inputStream.readObject();
                 return account;
+            } else if (filNavn.equals("boligforening")) {
+                BoligForening bf = (BoligForening) inputStream.readObject();
+                return bf;
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }finally{
-            return bruger;
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-
+        return null;
     }
 
     public Bruger hentGemtBruger(String filNavn) {
@@ -63,6 +75,7 @@ Context context;
         }
         return bruger;
     }
+
     public void gemData(final Object objects, String filNavn) {
         final String FILNAVN = context.getFilesDir() + "/" + filNavn + ".ser";
         System.out.println(FILNAVN);

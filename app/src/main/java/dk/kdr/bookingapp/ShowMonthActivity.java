@@ -42,12 +42,12 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     boolean[] erDagLedig;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         vs = BookingApplication.vtCont;
+
+
 
         month = CalenderController.getToday().getMonthOfYear();
         startDay = CalenderController.getFirstMondayInCalender(month);
@@ -75,15 +75,11 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         next = (TextView) findViewById(R.id.month_increase);
         next.setOnClickListener(this);
 
-
         BookingApplication.isMonth = true;
 
         gridView = (GridView) findViewById(R.id.gridView1);
         maanedText = (TextView) findViewById(R.id.maaned_text);
         maanedText.setText(CalenderController.getMonthInText(month));
-
-
-
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -121,30 +117,12 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
         if (oldMonth != month) {
             maanedText.setText(CalenderController.getMonthInText(month));
-            final LocalDate startDay = CalenderController.getFirstMondayInCalender(month);
+            startDay = CalenderController.getFirstMondayInCalender(month);
 
             //Progress dialog vises, hvis der er lang loading tid
-            pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
+            final ProgressDialog pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
 
-
-            //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
-            new AsyncTask<Void, Void, String>() {
-                @Override
-                protected String doInBackground(Void... params) {
-                    BookingApplication.hentReservationer(CalenderController.dateToMillis(startDay), CalenderController.dateToMillis(CalenderController.getLastDayInCalender(month)));
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(String s) {
-                    super.onPostExecute(s);
-                    pDiag.dismiss();
-                }
-            }.execute();
-            dates = vs.fillVaskeTavle(startDay, null);
-            BookingApplication.isMonth = true;
-
-            gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig(), false));
+            new AsyncData(this, pDiag).execute();
         }
     }
 
@@ -157,18 +135,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         erDagLedig = vs.getErDagLedig();
 
         BookingApplication.isMonth = true;
-
-        gridView = (GridView) findViewById(R.id.gridView1);
-
-
-
-        gridView.setAdapter(new CalenderView(this, dates, erDagLedig, false));
-
-
-
-
-
-
+        gridView.setAdapter(new CalenderView(this, dates, vs.getErDagLedig(), false));
     }
 
     @Override

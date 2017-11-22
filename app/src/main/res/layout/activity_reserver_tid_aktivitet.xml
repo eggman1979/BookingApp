@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    android:background="#000000"
+    android:gravity="center_vertical"
+    tools:context="dk.kdr.bookingapp.ReserverTidAktivitet">
+
+    <TableLayout
+        android:id="@+id/info_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="Boligforening:"
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+            <TextView
+                android:id="@+id/reserver_boligforening"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="Kildevang"
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="Dato "
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+            <TextView
+                android:id="@+id/reserver_dato"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="16. oktober 2017"
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="Tidspunkt "
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+            <TextView
+                android:id="@+id/reserver_tid_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="12:00"
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="Vaskerum "
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+            <TextView
+                android:id="@+id/reserver_vaskeblok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="3"
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="Vaskerum "
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+            <TextView
+                android:id="@+id/reserver_vaskerum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="1"
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="Bruger "
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+            <TextView
+                android:id="@+id/reserver_bruger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:text="1"
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/button_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_table"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/afvis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/button_menu"
+            android:gravity="center"
+            android:text="Afvis"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/accept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/accept_button_menu"
+            android:gravity="center"
+            android:text="Reserver"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+
+</RelativeLayout>
