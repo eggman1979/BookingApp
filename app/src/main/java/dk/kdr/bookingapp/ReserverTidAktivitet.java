@@ -1,15 +1,22 @@
 package dk.kdr.bookingapp;
 
+import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import data.Reservation;
+import logik.AsyncReservation;
 import logik.BookingApplication;
 import logik.CalenderController;
+import logik.Callback;
 
-public class ReserverTidAktivitet extends AppCompatActivity {
+public class ReserverTidAktivitet extends AppCompatActivity implements View.OnClickListener, Callback {
 
     Button accept, afvis;
     TextView datoText, vaskeRumText, brugerIDText, boligforeningText, tidText, vaskeBlokText;
@@ -45,14 +52,41 @@ public class ReserverTidAktivitet extends AppCompatActivity {
         boligforeningText = (TextView) findViewById(R.id.reserver_boligforening);
 
         datoText.setText(CalenderController.millisToDate(dato).toString());
-        vaskeBlokText.setText(vaskeBlok +"");
-        vaskeRumText.setText(vaskerum+"");
+        vaskeBlokText.setText(vaskeBlok + "");
+        vaskeRumText.setText(vaskerum + "");
         boligforeningText.setText(boligforening);
         tidText.setText(tid);
-        brugerIDText.setText(bruger+"");
+        brugerIDText.setText(bruger + "");
 
         afvis = (Button) findViewById(R.id.afvis);
+        afvis.setOnClickListener(this);
         accept = (Button) findViewById(R.id.accept);
+        accept.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == afvis) {
+            Toast.makeText(this, "Du valgte at afvise reservationen", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (v == accept) {
+            ProgressDialog pDiag = ProgressDialog.show(this, "Forsøger at reservere din vasketid", "Vent venligst", true);
+            // Reservationen opbygges på bagrund af dato, tid osv. bruger og boligforening hentes fra Bookingapplication;
+            Reservation res = new Reservation(BookingApplication.bruger.getBrugerID(), dato, vaskeBlok, BookingApplication.boligForening.getId(), vaskerum, -1L);
+            new AsyncReservation(this, res, pDiag).execute();
+        }
+
+    }
+
+    @Override
+    public void onEventCompleted() {
+        System.out.println("RESERVATIONEN ER GEMT");
+    }
+
+    @Override
+    public void onEventFailed() {
+        System.out.println("FEJL I OPRET RESERVATION");
     }
 }

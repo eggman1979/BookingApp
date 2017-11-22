@@ -54,8 +54,8 @@ public class ConnectService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
 
-    //    String baseURL = "http://192.168.0.13:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Hjemmenet
-    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // telefon
+        String baseURL = "http://192.168.0.13:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Hjemmenet
+//    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // telefon
 
     //    String baseURL = "http://192.168.0.110:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra
     @Nullable
@@ -241,10 +241,12 @@ public class ConnectService extends Service {
         }).start();
     }
 
-    public boolean reserverVasketid(Reservation res) {
+    public int reserverVasketid(Reservation res) {
+        int response = 500;
         try {
-            res = new Reservation(1, CalenderController.dateToMillis(LocalDate.now()), 1, 1, 1, 1);
-            URL url = new URL("http://192.168.43.80:8080/BookingServer/rest/reservationService/reservationer");
+            
+            URL url = new URL(baseURL+ "reservationService/reservationer");
+
             System.out.println(url);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("PUT");
@@ -262,13 +264,13 @@ public class ConnectService extends Service {
             out.close();
 
             connection.connect();
-            System.out.println(connection.getResponseCode() + "");
+         response = connection.getResponseCode() ;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        return response;
     }
 
     public void hentGemtReservation(String filNavn) {

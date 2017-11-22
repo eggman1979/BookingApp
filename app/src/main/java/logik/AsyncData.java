@@ -29,7 +29,7 @@ public class AsyncData extends AsyncTask<Void, Void, Void> {
         System.out.println("Bruger = " + BookingApplication.bruger.getNavn());
         try {
 
-            BookingApplication.cService.reserverVasketid(null);
+
             BookingApplication.cService.hentReservationer(BookingApplication.boligForening.getId(), BookingApplication.vtCont.getSidstHentet());
             Thread.sleep(100);
 
