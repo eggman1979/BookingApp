@@ -33,14 +33,15 @@ public class VisLedigeVaskerum extends AppCompatActivity implements AdapterView.
         blok = i.getIntExtra("Blok", -1);
         VaskeBlok vBlok = BookingApplication.vtCont.getvBlokke().get(blok);
         System.out.println(dato);
+        List<VaskeTid> tider = BookingApplication.vtCont.findVaskeTid(dato,blok);
         boolean[] ledigeRum = BookingApplication.vtCont.ledigeVaskerum(dato, blok);
-        System.out.println(ledigeRum);
+
 
         blokText = (TextView) findViewById(R.id.bloktid);
         list = (ListView) findViewById(R.id.vaskerum_liste);
         blokText.setText("Vasketid: " + vBlok.getStartTid()+":00");
 
-        TavleAdapter ta = new TavleAdapter(this, ledigeRum);
+        TavleAdapter ta = new TavleAdapter(this, ledigeRum, tider);
 
         list.setAdapter(ta);
         list.setOnItemClickListener(this);

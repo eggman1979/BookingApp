@@ -46,25 +46,24 @@ public class VisVaskeDagActivity extends AppCompatActivity {
         dato = b.getLong("Dato");
         System.out.println("Fra VisVaskeDagAktivitet - dato " + dato);
 
-        BookingApplication.hentReservationer(dato,dato);
+        List<VaskeDag> vaskeDage = BookingApplication.vtCont.findVaskeDag(dato);
+        System.out.println("Vaskedage "+vaskeDage.size());
 
         ledigeTider = BookingApplication.vtCont.ledigeVaskeTider(dato, BookingApplication.isMonth);
         List<VaskeBlok> vBlokke = BookingApplication.vtCont.getvBlokke();
 
 
-
-
         String datoString = CalenderController.millisToDate(dato).toString();
         datoText.setText(datoString);
 
-        timeListe.setAdapter(new TimeListeAdapter(this,vBlokke, ledigeTider));
+        timeListe.setAdapter(new TimeListeAdapter(this, vBlokke, ledigeTider, vaskeDage ));
         timeListe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
 
-               System.out.println("Fra VaskeDagAktivitet - setOnItem.... Dato " + dato);
+                System.out.println("Fra VaskeDagAktivitet - setOnItem.... Dato " + dato);
 
                 Intent i = new Intent(getApplicationContext(), VisLedigeVaskerum.class);
                 i.putExtra("Dato", dato);

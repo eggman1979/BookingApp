@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-<TextView
-    android:id="@+id/tid"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#ff0000"
-    android:text="time"
-    android:textSize="30dp"
-    android:textColor="#000000"
-    android:gravity="center"/>
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/tid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="time"
+            android:textColor="#000000"
+            android:textSize="30dp" />
 
 
+        <ImageView
+            android:id="@+id/booked_af_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tid" />
+    </RelativeLayout>
 </LinearLayout>

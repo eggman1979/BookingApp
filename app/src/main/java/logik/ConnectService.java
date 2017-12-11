@@ -54,7 +54,7 @@ public class ConnectService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
 
-        String baseURL = "http://192.168.0.13:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Hjemmenet
+        String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Hjemmenet
 //    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // telefon
 
     //    String baseURL = "http://192.168.0.110:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra

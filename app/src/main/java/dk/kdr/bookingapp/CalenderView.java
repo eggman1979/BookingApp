@@ -1,25 +1,21 @@
 package dk.kdr.bookingapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.joda.time.LocalDate;
 
 import java.util.List;
 
-import data.VaskeDag;
 import data.VaskeTavle;
+import logik.BookingApplication;
 import logik.CalenderController;
-
-import static android.R.attr.start;
 
 
 /**
@@ -71,22 +67,45 @@ public class CalenderView extends BaseAdapter {
         }
         gridView = inflater.inflate(R.layout.grid_item, null);
         TextView textView = (TextView) gridView.findViewById(R.id.grid_item_label);
+        TextView week = (TextView) gridView.findViewById(R.id.weekday);
+        ImageView image = (ImageView) gridView.findViewById(R.id.booked_af_user);
+
 
 ////      finder dato på baggrund af de reservationer der er sendt med, datoen vises i toppen af aktiviteten.
         LocalDate date = new LocalDate(dates.get(0).getVaskeDage().get(position).getVasketider().get(0).getDato());
         int day = date.getDayOfMonth();
-//
-        if (isWeek) {
-            month = ". " +CalenderController.getMonthInText(date.getMonthOfYear());
-        }
-        textView.setText(day + month);
+        String weekday = CalenderController.getWeekDay(date);
 
+        if (isWeek) {
+            month = ". " + CalenderController.getMonthInText(date.getMonthOfYear());
+        }
+        boolean harBrugerBooked = false;
+        textView.setText(day + month);
+        for (VaskeTavle vt : dates) {
+            for (int i = 0; i < vt.getVaskeDage().get(position).getAntalBlokke(); i++) {
+                if (vt.getVaskeDage().get(position).getVasketider().get(i).getReservation() != null) {
+                    int bruger = vt.getVaskeDage().get(position).getVasketider().get(i).getReservation().getBrugerID();
+                    if (bruger == BookingApplication.bruger.getBrugerID()) {
+                        harBrugerBooked = true;
+                        System.out.println("true");
+                    }
+                }
+            }
+        }
+
+        week.setText(weekday);
 
 //        Check om vaskedagen er ledig, hvis den er , så males der grøn ellers rød
         if (erDagLedig[position]) {
             gridView.setBackgroundColor(Color.GREEN);
+            if(harBrugerBooked){
+                image.setBackgroundResource(R.drawable.avail_dot);
+            }
         } else {
             gridView.setBackgroundColor(Color.RED);
+            if(harBrugerBooked){
+                image.setBackgroundResource(R.drawable.full_dot);
+            }
         }
 
         return gridView;

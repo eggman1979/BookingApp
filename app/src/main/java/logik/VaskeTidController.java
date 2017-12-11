@@ -156,22 +156,34 @@ public class VaskeTidController {
     public List<VaskeDag> findVaskeDag(long dato) {
 
         List<VaskeDag> vDage = new ArrayList<>();
-        int index = -1;
+
 
         for (VaskeTavle tavle : tavler) {
-            if (index != -1) {
-                vDage.add(tavle.getVaskeDage().get(index));
-            }
+
             for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
-                VaskeDag vDag = tavle.getVaskeDage().get(i);
-                if (vDag.getVasketider().get(0).getDato() == dato) {
-                    index = i;
-                    vDage.add(tavle.getVaskeDage().get(index));
+                VaskeDag vdag = tavle.getVaskeDage().get(i);
+                if (vdag.getVasketider().get(0).getDato() == dato) {
+                    vDage.add(vdag);
+                    break;
                 }
             }
         }
 
         return vDage;
+    }
+    public List<VaskeTid> findVaskeTid(long dato, int blok) {
+        List<VaskeTid> tider = new ArrayList<>();
+        for (VaskeTavle tavle : tavler) {
+
+            for (int i = 0; i < ANTAL_DAGE_I_KALENDER; i++) {
+                VaskeTid vTid = tavle.getVaskeDage().get(i).getVasketider().get(blok);
+                if (vTid.getDato() == dato) {
+                    tider.add(vTid);
+                    break;
+                }
+            }
+        }
+        return tider;
     }
 
     public boolean[] ledigeVaskerum(long dato, int blok) {

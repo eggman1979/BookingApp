@@ -53,15 +53,8 @@ public class ShowWeekActivity extends AppCompatActivity implements View.OnClickL
         //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
 
         tavler = vtc.fillVaskeTavle(startDag, slutDato);
-        int check = 0;
-        for (VaskeTavle tavle : tavler) {
-            for (VaskeDag dag : tavle.getVaskeDage())
-                for (VaskeTid tid : dag.getVasketider())
-                    if (tid.getReservation() != null) {
-                        System.out.println(check++);
 
-                    }
-        }
+
         System.out.println("Antallet af tavler er " + tavler.size() + "; antallet af vaskedage: " + vtc.getErDagLedig().length);
 
         if (vtc.getErDagLedig() != null) {

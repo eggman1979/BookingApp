@@ -77,16 +77,23 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
             Reservation res = new Reservation(BookingApplication.bruger.getBrugerID(), dato, vaskeBlok, BookingApplication.boligForening.getId(), vaskerum, -1L);
             new AsyncReservation(this, res, pDiag).execute();
         }
+        Intent i = null;
+        if(BookingApplication.isMonth) {
+            i = new Intent(this, ShowMonthActivity.class);
+        }else{
+            i = new Intent(this, ShowWeekActivity.class);
+        }
+        startActivity(i);
 
     }
 
     @Override
     public void onEventCompleted() {
-        System.out.println("RESERVATIONEN ER GEMT");
+        Toast.makeText(this, "Reservationen er gemt", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEventFailed() {
-        System.out.println("FEJL I OPRET RESERVATION");
+        Toast.makeText(this, "Der opstod en fejl, kontroller din internet forbindelse", Toast.LENGTH_SHORT).show();
     }
 }

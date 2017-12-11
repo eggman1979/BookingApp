@@ -77,5 +77,12 @@ public class CalenderController {
         return Days.daysBetween(start,slut).getDays()+1;
     }
 
+    public static String getWeekDay(LocalDate dato){
+
+        DateTimeFormatter format = DateTimeFormat.forPattern("E");
+        String weekDay = format.print(dato);
+        return weekDay;
+    }
+
 
 }
