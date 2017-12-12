@@ -184,7 +184,7 @@ public class ConnectService extends Service {
 
         try {
 
-            URL url = new URL(baseURL + "vaskebloksservice/vaskeblokke/1");
+            URL url = new URL(baseURL + "vaskebloksservice/vaskeblokke/"+ BookingApplication.boligForening.getId());
             String data = openServiceConnection(url);
             Log.w("run: ", "");
 
