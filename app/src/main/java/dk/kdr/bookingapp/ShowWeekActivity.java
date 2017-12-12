@@ -90,7 +90,8 @@ public class ShowWeekActivity extends AppCompatActivity implements View.OnClickL
         } else if (v == nextWeek) {
             week++;
         }
-        currentWeek.setText("uge " + week);
+        int weekInYear = CalenderController.getWeek(week );
+        currentWeek.setText("uge " + weekInYear);
         final LocalDate startDag = CalenderController.getFirstDayOfWeek(week);
         final LocalDate slutDato = CalenderController.getLastDayOfWeek(week);
 

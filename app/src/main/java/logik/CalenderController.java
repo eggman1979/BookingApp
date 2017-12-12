@@ -61,12 +61,16 @@ public class CalenderController {
     }
 
     public static LocalDate getFirstDayOfWeek(int week) {
-        LocalDate startDag = new LocalDate().withWeekOfWeekyear(week).withDayOfWeek(1);
-        return startDag;
+        LocalDate first = getToday().withDayOfWeek(1);
+        int weekNow = first.getWeekOfWeekyear();
+        int difference = week - weekNow;
+        LocalDate weekDate = first.plusWeeks(difference);
+        LocalDate firstDayOfWeek = weekDate.withDayOfWeek(1);
+        return firstDayOfWeek;
     }
 
     public static LocalDate getLastDayOfWeek(int week) {
-        LocalDate slutDag = new LocalDate().withWeekOfWeekyear(week).withDayOfWeek(7);
+        LocalDate slutDag = getFirstDayOfWeek(week).plusDays(6);
         return slutDag;
     }
 
@@ -78,11 +82,14 @@ public class CalenderController {
     }
 
     public static String getWeekDay(LocalDate dato){
-
         DateTimeFormatter format = DateTimeFormat.forPattern("E");
         String weekDay = format.print(dato);
         return weekDay;
     }
 
 
+    public static int getWeek(int week) {
+        int weekYear = getFirstDayOfWeek(week).getWeekOfWeekyear();
+        return weekYear;
+    }
 }
