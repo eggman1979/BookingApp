@@ -3,7 +3,7 @@
     package="dk.kdr.bookingapp">
 
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="18 "
         android:targetSdkVersion="25" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,7 +15,7 @@
     <application
         android:name="logik.BookingApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/v_book_icon"
         android:label="bookingapp"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
