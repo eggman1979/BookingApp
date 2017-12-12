@@ -39,18 +39,19 @@ public class ShowWeekActivity extends AppCompatActivity implements View.OnClickL
 
         weekList = (ListView) findViewById(R.id.weekList);
         prevWeek = (TextView) findViewById(R.id.prevWeek);
+        prevWeek.setOnClickListener(this);
         currentWeek = (TextView) findViewById(R.id.currentWeek);
         nextWeek = (TextView) findViewById(R.id.nextWeek);
+        nextWeek.setOnClickListener(this);
         changeToMonth = (TextView) findViewById(R.id.monthView);
         changeToMonth.setOnClickListener(this);
 
 
         week = CalenderController.getToday().getWeekOfWeekyear();
+        currentWeek.setText("uge " + week);
+
         final LocalDate startDag = CalenderController.getFirstDayOfWeek(week);
         final LocalDate slutDato = CalenderController.getLastDayOfWeek(week);
-
-
-        //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
 
         tavler = vtc.fillVaskeTavle(startDag, slutDato);
 
@@ -83,13 +84,19 @@ public class ShowWeekActivity extends AppCompatActivity implements View.OnClickL
             BookingApplication.isMonth = true;
             Intent i = new Intent(this, ShowMonthActivity.class);
             startActivity(i);
-        }
-        else if(v == prevWeek){
-                week--;
-        }
-        else if(v == nextWeek){
+        } else if (v == prevWeek) {
+            week--;
+
+        } else if (v == nextWeek) {
             week++;
         }
+        currentWeek.setText("uge " + week);
+        final LocalDate startDag = CalenderController.getFirstDayOfWeek(week);
+        final LocalDate slutDato = CalenderController.getLastDayOfWeek(week);
 
+        tavler = vtc.fillVaskeTavle(startDag, slutDato);
+        if (vtc.getErDagLedig() != null) {
+            weekList.setAdapter(new CalenderView(this, tavler, vtc.getErDagLedig(), true));
+        }
     }
 }
