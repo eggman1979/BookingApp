@@ -11,6 +11,27 @@
     android:showDividers="middle"
     tools:context="dk.kdr.bookingapp.MainActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="40dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vaskebooking"
+            android:textColor="#ffffff"
+            android:textSize="30dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" Indtast dine bruger oplysninger"
+            android:textColor="#656565"
+            android:textSize="20dp" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/bruger"
@@ -18,7 +39,7 @@
         android:layout_height="wrap_content"
         android:background="#323232"
         android:gravity="center_horizontal"
-        android:text=""
+        android:hint="bruger ID"
         android:textColor="#ffffff"
         android:textColorHint="#ffffff"
         android:textSize="30dp" />
@@ -29,7 +50,7 @@
         android:layout_height="wrap_content"
         android:background="#323232"
         android:gravity="center_horizontal"
-        android:text=""
+        android:hint="forening"
         android:textColor="#ffffff"
         android:textColorHint="#ffffff"
         android:textSize="30dp" />
@@ -42,7 +63,7 @@
         android:background="#323232"
         android:ems="10"
         android:gravity="center_horizontal"
-        android:text=""
+        android:hint="password"
         android:inputType="textPassword"
         android:textColor="#ffffff"
         android:textColorHint="#ffffff"

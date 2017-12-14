@@ -102,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onEventFailed() {
         pDiag.dismiss();
         Toast.makeText(this, " Der kunne ikke forbindes til serveren", Toast.LENGTH_SHORT).show();
+        user.setText("");
+        pass.setText("");
+        forening.setText("");
         System.out.println("FAILED");
     }
 }
