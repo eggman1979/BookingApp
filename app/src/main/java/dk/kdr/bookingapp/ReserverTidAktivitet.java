@@ -38,7 +38,7 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
         vaskeBlok = i.getIntExtra("blok", -1);
 
         vaskerum = i.getIntExtra("rum", -1);
-        tid = BookingApplication.vtCont.getvBlokke().get(vaskeBlok).getStartTid() + ":00";
+        tid = BookingApplication.vtCont.getvBlokke().get(vaskeBlok-1).getStartTid() + ":00";
 
         statusText = (TextView) findViewById(R.id.status);
         datoText = (TextView) findViewById(R.id.reserver_dato);
@@ -50,8 +50,8 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
 
         boligforening = BookingApplication.boligForening.getNavn();
 
-        System.out.println(" DATO TAVLE BLOG " + dato + " " + vaskerum + " " + vaskeBlok);
-        Reservation reservation = BookingApplication.vtCont.getReservation(dato, vaskerum, vaskeBlok+1);
+
+        Reservation reservation = BookingApplication.vtCont.getReservation(dato, vaskerum, vaskeBlok);
         System.out.println("Reservationen er " + reservation);
 
         afvis = (Button) findViewById(R.id.afvis);
@@ -97,6 +97,7 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
+        System.out.println("Vaskeblok = " + vaskeBlok);
         if (v == afvis) {
             Toast.makeText(this, "Du valgte at afvise reservationen", Toast.LENGTH_SHORT).show();
             finish();

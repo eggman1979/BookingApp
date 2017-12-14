@@ -63,8 +63,10 @@ public class TavleAdapter extends BaseAdapter {
         boolean brugerHasBooked = false;
         for (VaskeTid vt : tider) {
             if (vt.getReservation() != null) {
-                if (vt.getReservation().getBrugerID() == BookingApplication.bruger.getBrugerID()) {
+                if (vt.getReservation().getBrugerID() == BookingApplication.bruger.getBrugerID() && position == (vt.getReservation().getTavleID()-1)) {
                     brugerHasBooked = true;
+
+
                 }
             }
         }

@@ -57,7 +57,7 @@ public class VisLedigeVaskerum extends AppCompatActivity implements AdapterView.
         Intent i = new Intent(this, ReserverTidAktivitet.class );
         Bundle b = new Bundle();
         b.putLong("dato", dato);
-        b.putInt("blok", blok); // Måske plus 1?
+        b.putInt("blok", blok+1); // Måske plus 1?
         b.putInt("rum", position+1);
         i.putExtras(b);
         startActivity(i);
