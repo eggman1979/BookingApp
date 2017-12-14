@@ -22,6 +22,33 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:gravity="left"
+                android:text="Status:"
+                android:textColor="#999999"
+                android:textSize="20dp" />
+
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
+                android:textColor="#00ff00"
+                android:text="ledig½"
+                android:textSize="20dp" />
+
+
+        </TableRow>
+
+
+        <TableRow>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="left"
                 android:text="Boligforening:"
                 android:textColor="#999999"
                 android:textSize="20dp" />
@@ -99,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:gravity="left"
-                android:text="Vaskerum "
+                android:text="Vasketid "
                 android:textColor="#999999"
                 android:textSize="20dp" />
 

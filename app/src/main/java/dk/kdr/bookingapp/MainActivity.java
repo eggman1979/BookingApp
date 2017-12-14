@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Fabric.with(this, new Crashlytics());
 
+        //Brugeren forsøges at hentes fra telefonen, hvis denne allerede er logged ind
         BookingApplication.bruger = (Bruger) BookingApplication.persistent.hentGemtFil("bruger");
         Account acc = (Account) BookingApplication.persistent.hentGemtFil("account");
         BookingApplication.account = acc;
@@ -60,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void hideAllBars() {
+    // metode der gemmer menubaren
+    private void hideAllBars() {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
@@ -71,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        //TODO Skal lave funktionalitet op imod rest serveren.
-
 
         userName = user.getText().toString();
         password = pass.getText().toString();
@@ -100,11 +100,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onEventFailed() {
+        // Noget er gået galt og startskærmen vises igen
         pDiag.dismiss();
         Toast.makeText(this, " Der kunne ikke forbindes til serveren", Toast.LENGTH_SHORT).show();
         user.setText("");
         pass.setText("");
         forening.setText("");
-        System.out.println("FAILED");
+
     }
 }

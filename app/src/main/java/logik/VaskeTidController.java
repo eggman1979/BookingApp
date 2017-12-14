@@ -248,7 +248,7 @@ public class VaskeTidController {
     }
 
     public List<Reservation> getReservations() {
-        System.out.println("get res " +reservations);
+        System.out.println("get res " + reservations);
         return reservations;
     }
 //    public void printAllReservations() {
@@ -297,5 +297,15 @@ public class VaskeTidController {
             reservations.remove(res);
         }
 
+    }
+
+    public Reservation getReservation(long dato, int tavle, int blok) {
+        System.out.println("dato"  + dato  +" blok " +blok + "tavle " + tavle);
+        for (Reservation res : reservations) {
+            if (res.getDato() == dato && res.getTavleID() == (tavle) && res.getvaskeBlokID() == (blok)) {
+                return res;
+            }
+        }
+        return null;
     }
 }

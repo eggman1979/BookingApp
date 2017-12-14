@@ -67,7 +67,7 @@ public class ReservationsListeAdapter extends BaseAdapter {
 
         Reservation res = resList.get(position);
         tavle.setText("Vaskerum " + res.getTavleID());
-        VaskeBlok blok = BookingApplication.vtCont.getvBlokke().get(res.getvaskeBlokID());
+        VaskeBlok blok = BookingApplication.vtCont.getvBlokke().get(res.getvaskeBlokID()-1);
 
         tid.setText("Kl. "+blok.getStartTid() + ":00");
 
