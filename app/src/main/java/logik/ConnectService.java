@@ -54,10 +54,10 @@ public class ConnectService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
 
-        String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Hjemmenet
-//    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // telefon
+    String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
+//    String baseURL = "http://192.168.0.12:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // hjemmenet
 
-    //    String baseURL = "http://192.168.0.110:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -105,10 +105,8 @@ public class ConnectService extends Service {
         InputStream is = null;
 
         try {
-
             URL url = new URL(baseURL + "reservationService/reservationer/" + boligID + "/" + sidstHentet);
             line = openServiceConnection(url);
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -130,9 +128,6 @@ public class ConnectService extends Service {
         }
     }
 
-
-//    }
-
     public void hentBoligforening(int boligforeningId) throws IOException {//TODO Der skal et boligselskabs id med som parameter
         final String urlExtend = "bfService/boligforeninger/" + boligforeningId;
 
@@ -147,13 +142,11 @@ public class ConnectService extends Service {
             e.printStackTrace();
         }
 
-
         Gson gson = new Gson();
         BoligForening bf = gson.fromJson(line, BoligForening.class);
         Log.w("data fra server", bf.getNavn() + "  der er noget?");
         BookingApplication.boligForening = bf;
         BookingApplication.persistent.gemData(BookingApplication.boligForening, "boligforening");
-
     }
 
     public void hentVaskeTavler() throws IOException {
@@ -173,18 +166,16 @@ public class ConnectService extends Service {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void hentVaskeBlokke() throws IOException { //TODO Der skal et boligselskabs id med som parameter
-
 
         String line = "";
         InputStream is = null;
 
         try {
 
-            URL url = new URL(baseURL + "vaskebloksservice/vaskeblokke/"+ BookingApplication.boligForening.getId());
+            URL url = new URL(baseURL + "vaskebloksservice/vaskeblokke/" + BookingApplication.boligForening.getId());
             String data = openServiceConnection(url);
             Log.w("run: ", "");
 
@@ -229,23 +220,11 @@ public class ConnectService extends Service {
         return line;
     }
 
-
-    public void hentData() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                hentGemtReservation("res");
-                hentGemtTavler();
-                hentGemtBlokke();
-            }
-        }).start();
-    }
-
     public int reserverVasketid(Reservation res) {
         int response = 500;
         try {
-            
-            URL url = new URL(baseURL+ "reservationService/reservationer");
+
+            URL url = new URL(baseURL + "reservationService/reservationer");
 
             System.out.println(url);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -264,7 +243,7 @@ public class ConnectService extends Service {
             out.close();
 
             connection.connect();
-         response = connection.getResponseCode() ;
+            response = connection.getResponseCode();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -273,47 +252,33 @@ public class ConnectService extends Service {
         return response;
     }
 
-    public void hentGemtReservation(String filNavn) {
-        String FILNAVN = this.getFilesDir() + "/" + filNavn + ".ser";
-        try {
-            FileInputStream fileOutputStream = new FileInputStream(FILNAVN);
-            ObjectInputStream inputStream = new ObjectInputStream(fileOutputStream);
-            BookingApplication.vtCont.setReservations((List<Reservation>) inputStream.readObject());
-            System.out.println(BookingApplication.vtCont.getReservations().size());
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void hentGemtTavler() {
-        String FILNAVN = this.getFilesDir() + "/tavler.ser";
+    public int deleteReservation(int reservationID) {
+        InputStream is = null;
+        int response = -1;
         try {
-            FileInputStream fileOutputStream = new FileInputStream(FILNAVN);
-            ObjectInputStream inputStream = new ObjectInputStream(fileOutputStream);
-            BookingApplication.vtCont.setVaskeTavler((List<VaskeTavle>) inputStream.readObject());
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+            URL url = new URL(baseURL + "reservationService/reservationer/" + reservationID);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("DELETE");
+            is = connection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-    public void hentGemtBlokke() {
-        String FILNAVN = this.getFilesDir() + "/blokke.ser";
-        try {
-            FileInputStream fileOutputStream = new FileInputStream(FILNAVN);
-            ObjectInputStream inputStream = new ObjectInputStream(fileOutputStream);
-            BookingApplication.vtCont.setvBlokke((List<VaskeBlok>) inputStream.readObject());
-            inputStream.close();
+            response = connection.getResponseCode();
+            System.out.println(response);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        return response;
     }
 
 }

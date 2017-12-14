@@ -220,6 +220,9 @@
             android:text="Afvis"
             android:textSize="15dp" />
 
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <Button
             android:id="@+id/accept"
             android:layout_width="match_parent"
@@ -229,6 +232,18 @@
             android:gravity="center"
             android:text="Reserver"
             android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/button_menu"
+            android:gravity="center"
+            android:text="Slet"
+            android:textSize="15dp"
+            android:visibility="invisible"/>
+        </FrameLayout>
     </LinearLayout>
 
 
