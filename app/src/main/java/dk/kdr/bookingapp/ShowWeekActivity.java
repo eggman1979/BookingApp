@@ -2,21 +2,16 @@ package dk.kdr.bookingapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import org.joda.time.LocalDate;
-
 import java.util.List;
-
 import data.VaskeDag;
 import data.VaskeTavle;
-import data.VaskeTid;
 import logik.BookingApplication;
 import logik.CalenderController;
 import logik.VaskeTidController;

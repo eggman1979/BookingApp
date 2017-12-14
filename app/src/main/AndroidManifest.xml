@@ -34,6 +34,8 @@
         <activity android:name=".VisLedigeVaskerum" />
         <activity android:name=".ShowWeekActivity" />
         <activity android:name=".ReserverTidAktivitet"></activity>
+        <activity android:name=".VisReservationer" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3791d9f2e87aa87b15e5501475e0a0b9a53715c5"

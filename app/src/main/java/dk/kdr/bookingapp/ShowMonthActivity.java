@@ -54,7 +54,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
         month = CalenderController.getToday().getMonthOfYear();
         startDay = CalenderController.getFirstMondayInCalender(month);
-        System.out.println("activity " + startDay.toString());
+
         boolean landscape = getResources().getBoolean(R.bool.isLandscape);
         if (landscape) {
             setContentView(R.layout.activity_showmonth_landscape);
@@ -109,6 +109,8 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         switch (item.getItemId()) {
             case R.id.vis_reservationer:
                 Toast.makeText(this, "Du får nu vist dine reservationer", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(this, VisReservationer.class);
+                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

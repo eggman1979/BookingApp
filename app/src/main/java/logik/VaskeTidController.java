@@ -171,6 +171,7 @@ public class VaskeTidController {
 
         return vDage;
     }
+
     public List<VaskeTid> findVaskeTid(long dato, int blok) {
         List<VaskeTid> tider = new ArrayList<>();
         for (VaskeTavle tavle : tavler) {
@@ -247,6 +248,7 @@ public class VaskeTidController {
     }
 
     public List<Reservation> getReservations() {
+        System.out.println("get res " +reservations);
         return reservations;
     }
 //    public void printAllReservations() {
