@@ -5,26 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-
-    android:background="#000000">
+    android:background="#000000"
+    android:orientation="vertical">
     tools:context="dk.kdr.bookingapp.VisReservationer">
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Du har følgende reservationer"
-
-    android:textColor="#ffffff"
-    android:textSize="15dp"/>
-
-    <ListView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:text="Du har følgende reservationer"
+        android:textColor="#ffffff"
+        android:textSize="15dp" />
 
-        android:id="@+id/resList"/>
-
-        />
+    <ListView
+        android:id="@+id/resList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+    />
 
 </RelativeLayout>

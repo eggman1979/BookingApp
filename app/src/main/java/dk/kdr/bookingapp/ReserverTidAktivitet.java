@@ -32,7 +32,6 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
 
         Intent i = this.getIntent();
         if (BookingApplication.bruger != null) {
-            System.out.println("BRUGER ER IKKE NULL");
             bruger = BookingApplication.bruger.getBrugerID();
             boligforening = "Kildevang";
         }

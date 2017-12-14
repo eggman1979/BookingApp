@@ -3,8 +3,11 @@ package dk.kdr.bookingapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Handler;
+
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         hideAllBars();
 
+        Fabric.with(this, new Crashlytics());
 
         BookingApplication.bruger = (Bruger) BookingApplication.persistent.hentGemtFil("bruger");
         Account acc = (Account) BookingApplication.persistent.hentGemtFil("account");
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onEventCompleted() {
         // Log in er gået godt og der kan skiftes aktivitet
-       BookingApplication.account = new Account(password, Integer.parseInt(userName), foreningNavn);
+        BookingApplication.account = new Account(password, Integer.parseInt(userName), foreningNavn);
 
         // Der sættes et flag på at brugeren er logget ind
         BookingApplication.prefEditor.putBoolean("isBrugerSet", true).commit();
