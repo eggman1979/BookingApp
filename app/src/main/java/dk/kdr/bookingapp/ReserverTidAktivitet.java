@@ -26,12 +26,15 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
     int vaskeBlok, vaskerum;
     String tid, boligforening;
     Reservation reservation;
+    ProgressDialog pDiag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserver_tid_aktivitet);
+
+
 
         Intent i = this.getIntent();
         dato = i.getLongExtra("dato", -1);
@@ -98,13 +101,13 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
             finish();
         }
         if (v == accept) {
-            ProgressDialog pDiag = ProgressDialog.show(this, "Forsøger at reservere din vasketid", "Vent venligst", true);
+            pDiag = ProgressDialog.show(this, "Forsøger at reservere din vasketid", "Vent venligst", true);
             // Reservationen opbygges på bagrund af dato, tid osv. bruger og boligforening hentes fra Bookingapplication;
             Reservation res = new Reservation(BookingApplication.bruger.getBrugerID(), dato, vaskeBlok, BookingApplication.boligForening.getId(), vaskerum, -1L);
             new AsyncReservation(this, res, pDiag).execute();
         }
         if (v == delete) {
-            ProgressDialog pDiag = ProgressDialog.show(this, "Forsøger at slette din vasketid", "Vent venligst", true);
+            pDiag = ProgressDialog.show(this, "Forsøger at slette din vasketid", "Vent venligst", true);
             new AsyncDelete(this, pDiag, reservation.getReservationID()).execute();
         }
         Intent i = null;
@@ -113,24 +116,33 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
         } else {
             i = new Intent(this, ShowWeekActivity.class);
         }
-        startActivity(i);
 
+        startActivity(i);
+        finish();
     }
 
     @Override
-    public void onEventCompleted() {
+    public void onEventCompleted(String msg) {
         if (accept.getVisibility() == View.VISIBLE) {
-            Toast.makeText(this, "Reservationen er gemt", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Reservationen er slettet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
             BookingApplication.vtCont.getReservations().remove(reservation);
         }
     }
 
     @Override
-    public void onEventFailed() {
+    public void onEventFailed(String msg) {
 
-        Toast.makeText(this, "Der opstod en fejl, kontroller din internet forbindelse", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (pDiag != null) {
+            pDiag.dismiss();
+        }
     }
 }

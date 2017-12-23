@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //Hvis brugeren allerede findes i appen, så skal den bare hoppe til showMonthActivity
             Intent i = new Intent(this, ShowMonthActivity.class);
             startActivity(i);
+            finish();
         }
 
     }
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onEventCompleted() {
+    public void onEventCompleted(String msg) {
         // Log in er gået godt og der kan skiftes aktivitet
         BookingApplication.account = new Account(password, Integer.parseInt(userName), foreningNavn);
 
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onEventFailed() {
+    public void onEventFailed(String msg) {
         // Noget er gået galt og startskærmen vises igen
         pDiag.dismiss();
         Toast.makeText(this, " Der kunne ikke forbindes til serveren", Toast.LENGTH_SHORT).show();

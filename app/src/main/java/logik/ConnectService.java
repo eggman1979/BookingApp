@@ -54,8 +54,8 @@ public class ConnectService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
 
-    String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
-//    String baseURL = "http://192.168.0.12:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // hjemmenet
+    //    String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
+    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // hjemmenet
 
 
     @Nullable
@@ -136,6 +136,7 @@ public class ConnectService extends Service {
         try {
             URL url = new URL(baseURL + urlExtend);
             line = openServiceConnection(url);
+            System.out.println(line);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -170,8 +171,6 @@ public class ConnectService extends Service {
 
     public void hentVaskeBlokke() throws IOException { //TODO Der skal et boligselskabs id med som parameter
 
-        String line = "";
-        InputStream is = null;
 
         try {
 
@@ -220,13 +219,16 @@ public class ConnectService extends Service {
         return line;
     }
 
-    public int reserverVasketid(Reservation res) {
-        int response = 500;
+    public String reserverVasketid(Reservation res) {
+        int responseCode = 500;
+        String response = "";
+        String line = "";
+        InputStream is = null;
+
         try {
 
             URL url = new URL(baseURL + "reservationService/reservationer");
 
-            System.out.println(url);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("PUT");
             connection.setRequestProperty("Content-type", "application/json; charset=utf8");
@@ -243,7 +245,18 @@ public class ConnectService extends Service {
             out.close();
 
             connection.connect();
-            response = connection.getResponseCode();
+            responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                is = connection.getInputStream();
+            } else if (responseCode == 500) {
+                is = connection.getErrorStream();
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            line = br.readLine();
+            response = responseCode + "," + line;
+            System.out.println(response);
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -253,17 +266,26 @@ public class ConnectService extends Service {
     }
 
 
-    public int deleteReservation(int reservationID) {
+    public String deleteReservation(int reservationID) {
         InputStream is = null;
-        int response = -1;
+        String response = "";
+         int  responseCode = -500;
         try {
             URL url = new URL(baseURL + "reservationService/reservationer/" + reservationID);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("DELETE");
             is = connection.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-            response = connection.getResponseCode();
+
+            responseCode = connection.getResponseCode();
+
+            if (responseCode == 200) {
+                is = connection.getInputStream();
+            } else if (responseCode == 500) {
+                is = connection.getErrorStream();
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            response = responseCode+","+ br.readLine();
             System.out.println(response);
         } catch (MalformedURLException e) {
             e.printStackTrace();

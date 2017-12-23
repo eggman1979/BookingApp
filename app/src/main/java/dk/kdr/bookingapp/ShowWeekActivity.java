@@ -1,7 +1,10 @@
 package dk.kdr.bookingapp;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,11 +15,13 @@ import org.joda.time.LocalDate;
 import java.util.List;
 import data.VaskeDag;
 import data.VaskeTavle;
+import logik.AsyncData;
 import logik.BookingApplication;
 import logik.CalenderController;
+import logik.Callback;
 import logik.VaskeTidController;
 
-public class ShowWeekActivity extends AppCompatActivity implements View.OnClickListener {
+public class ShowWeekActivity extends AppCompatActivity implements Callback, View.OnClickListener {
 
     int week = 0;
     ListView weekList;
@@ -24,6 +29,8 @@ public class ShowWeekActivity extends AppCompatActivity implements View.OnClickL
     VaskeTidController vtc;
     List<VaskeTavle> tavler;
     ProgressDialog pDiag;
+    LocalDate startDag;
+    LocalDate slutDag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,9 @@ public class ShowWeekActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_show_week);
         BookingApplication.isMonth = false;
         vtc = BookingApplication.vtCont;
+
+        pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
+        new AsyncData(this, pDiag).execute();
 
         weekList = (ListView) findViewById(R.id.weekList);
         prevWeek = (TextView) findViewById(R.id.prevWeek);
@@ -45,10 +55,10 @@ public class ShowWeekActivity extends AppCompatActivity implements View.OnClickL
         week = CalenderController.getToday().getWeekOfWeekyear();
         currentWeek.setText("uge " + week);
 
-        final LocalDate startDag = CalenderController.getFirstDayOfWeek(week);
-        final LocalDate slutDato = CalenderController.getLastDayOfWeek(week);
+        startDag = CalenderController.getFirstDayOfWeek(week);
+        slutDag = CalenderController.getLastDayOfWeek(week);
 
-        tavler = vtc.fillVaskeTavle(startDag, slutDato);
+        tavler = vtc.fillVaskeTavle(startDag, slutDag);
 
 
         System.out.println("Antallet af tavler er " + tavler.size() + "; antallet af vaskedage: " + vtc.getErDagLedig().length);
@@ -94,5 +104,47 @@ public class ShowWeekActivity extends AppCompatActivity implements View.OnClickL
         if (vtc.getErDagLedig() != null) {
             weekList.setAdapter(new CalenderView(this, tavler, vtc.getErDagLedig(), true));
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle("Afslut Vaskebooking")
+                .setMessage("Du er ved at afslutte Vaskebooking, er du sikker=")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ShowWeekActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
+    }
+
+    @Override
+    public void onEventCompleted(String msg) {
+        tavler= vtc.fillVaskeTavle(startDag, slutDag);
+     ;
+
+        BookingApplication.isMonth = false;
+    weekList  .setAdapter(new CalenderView(this, tavler, vtc.getErDagLedig(), true));
+    }
+
+    @Override
+    public void onEventFailed(String msg) {
+
     }
 }

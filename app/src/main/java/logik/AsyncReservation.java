@@ -14,6 +14,7 @@ public class AsyncReservation extends AsyncTask {
     Reservation reservation;
     ProgressDialog pDiag;
     private int responseCode;
+    private String response;
 
     public AsyncReservation(Callback cb, Reservation reservation, ProgressDialog pDiag) {
         this.cb = cb;
@@ -24,8 +25,11 @@ public class AsyncReservation extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] params) {
 
-        // Der skal være en returværdig der fortæller om det er gået godt eller ej;
-        responseCode = BookingApplication.cService.reserverVasketid(reservation);
+        // Der skal være en returværdi der fortæller om det er gået godt eller ej;
+        String answer  =BookingApplication.cService.reserverVasketid(reservation);
+
+         responseCode = Integer.parseInt(answer.split(",")[0]);
+        response = answer.split(",")[1];
         return null;
     }
 
@@ -33,9 +37,9 @@ public class AsyncReservation extends AsyncTask {
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
         if (responseCode == 200) {
-            cb.onEventCompleted();
+            cb.onEventCompleted(response);
         } else {
-            cb.onEventFailed();
+            cb.onEventFailed(response);
         }
         pDiag.dismiss();
     }

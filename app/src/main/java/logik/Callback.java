@@ -5,6 +5,7 @@ package logik;
  */
 
 public interface Callback {
-    void onEventCompleted();
-    void onEventFailed();
+    void onEventCompleted(String msg);
+    void onEventFailed(String msg);
+
 }

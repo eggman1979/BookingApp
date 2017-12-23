@@ -88,7 +88,12 @@ public class VaskeTidController {
     }
 
     public List<VaskeTavle> fillVaskeTavle(LocalDate startDag, LocalDate slutDag) {
+
+        System.out.println(startDag);
+        System.out.println(slutDag);
         int antalDage = CalenderController.getDaysBetween(startDag, slutDag);
+
+        System.out.println(antalDage + "frafill tavle");
 
         for (VaskeTavle tavle : tavler) {
             tavle.setVaskeDage(createVaskeDage(startDag, slutDag, tavle.getTavleID()));
@@ -220,11 +225,12 @@ public class VaskeTidController {
 
     public boolean[] ledigeVaskeTider(long dato, boolean isMonth) {
         // printAllReservations();
-
+System.out.println("Er måned " + isMonth);
         int antalDage = ANTAL_DAGE_I_KALENDER;
         if (!isMonth) {
             antalDage = 7;
         }
+        System.out.println("antaldage " + antalDage);
         boolean[] ledigeTider = new boolean[vBlokke.size()];
         System.out.println("ræder ind i ledigeVaskeDage antal dage er " + antalDage + " ØØØØØØ");
         int index = 0;

@@ -1,10 +1,13 @@
 package dk.kdr.bookingapp;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,12 +58,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         month = CalenderController.getToday().getMonthOfYear();
         startDay = CalenderController.getFirstMondayInCalender(month);
 
-        boolean landscape = getResources().getBoolean(R.bool.isLandscape);
-        if (landscape) {
-            setContentView(R.layout.activity_showmonth_landscape);
-        } else {
             setContentView(R.layout.activity_showmonth);
-        }
 
 
         //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
@@ -134,6 +132,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         } else if (v == next) {
             month++;
         } else if (v == week) {
+            BookingApplication.isMonth = false;
             Intent i = new Intent(this, ShowWeekActivity.class);
             startActivity(i);
         }
@@ -150,9 +149,8 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void onEventCompleted() {
+    public void onEventCompleted(String msg) {
 
-        //TODO Der skal hentes den bruger der er logget ind i appen, og på baggrund af denne skal der findes boligselskab og tavle
 
         dates = vs.fillVaskeTavle(startDay, null);
         erDagLedig = vs.getErDagLedig();
@@ -162,11 +160,38 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void onEventFailed() {
+    public void onEventFailed(String msg) {
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+            System.out.println("HEFHFEFE");
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(this);
+            }
+            builder.setTitle("Afslut Vaskebooking")
+                    .setMessage("Du er ved at afslutte Vaskebooking, er du sikker=")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            ShowMonthActivity.super.onBackPressed();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
 
     }
 }
-
 
 
 

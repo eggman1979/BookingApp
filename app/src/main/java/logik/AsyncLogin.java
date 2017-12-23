@@ -45,10 +45,10 @@ public class AsyncLogin extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
 
         if(BookingApplication.bruger != null ){
-            cb.onEventCompleted();
+            cb.onEventCompleted(null);
         }
         else{
-            cb.onEventFailed();
+            cb.onEventFailed(null);
         }
     }
 }

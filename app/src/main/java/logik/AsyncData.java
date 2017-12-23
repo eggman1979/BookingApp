@@ -26,13 +26,11 @@ public class AsyncData extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
 
-        System.out.println("Bruger = " + BookingApplication.bruger.getNavn());
-        try {
 
+        try {
 
             BookingApplication.cService.hentReservationer(BookingApplication.boligForening.getId(), BookingApplication.vtCont.getSidstHentet());
             Thread.sleep(100);
-
             BookingApplication.cService.hentVaskeTavler();
             Thread.sleep(100);
             BookingApplication.cService.hentVaskeBlokke();
@@ -49,11 +47,9 @@ public class AsyncData extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
 
         if (BookingApplication.vtCont.getVaskeTavler().size() > 0 && BookingApplication.vtCont.getvBlokke().size() > 0) {
-            System.out.println("SUCCESS");
-            cb.onEventCompleted();
+            cb.onEventCompleted(null);
         } else {
-            cb.onEventFailed();
-            System.out.println("Failed");
+            cb.onEventFailed(null);
         }
         if (pDiag != null) {
             pDiag.dismiss();
