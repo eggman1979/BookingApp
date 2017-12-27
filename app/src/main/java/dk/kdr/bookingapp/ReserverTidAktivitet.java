@@ -86,7 +86,7 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
         }
 
 
-        datoText.setText(CalenderController.millisToDate(dato).toString());
+        datoText.setText(CalenderController.millisToDate(dato).toString("dd MMMM YYYY"));
         vaskeBlokText.setText(vaskeBlok + "");
         vaskeRumText.setText(vaskerum + "");
         boligforeningText.setText(boligforening);

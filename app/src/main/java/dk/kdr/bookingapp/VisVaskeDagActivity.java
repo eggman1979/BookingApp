@@ -53,7 +53,7 @@ public class VisVaskeDagActivity extends AppCompatActivity {
         List<VaskeBlok> vBlokke = BookingApplication.vtCont.getvBlokke();
 
 
-        String datoString = CalenderController.millisToDate(dato).toString();
+        String datoString = CalenderController.millisToDate(dato).toString("dd MMMM YYYY");
         datoText.setText(datoString);
 
         timeListe.setAdapter(new TimeListeAdapter(this, vBlokke, ledigeTider, vaskeDage ));
