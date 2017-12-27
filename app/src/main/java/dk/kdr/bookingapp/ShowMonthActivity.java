@@ -100,6 +100,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
                 b.putLong("Dato", dato);
                 i.putExtras(b);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(i);
             }
         });

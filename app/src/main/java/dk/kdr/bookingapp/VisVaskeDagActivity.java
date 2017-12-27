@@ -68,6 +68,7 @@ public class VisVaskeDagActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), VisLedigeVaskerum.class);
                 i.putExtra("Dato", dato);
                 i.putExtra("Blok", position);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(i);
             }
         });

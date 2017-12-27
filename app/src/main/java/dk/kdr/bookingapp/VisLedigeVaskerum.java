@@ -60,6 +60,7 @@ public class VisLedigeVaskerum extends AppCompatActivity implements AdapterView.
         b.putInt("blok", blok+1); // Måske plus 1?
         b.putInt("rum", position+1);
         i.putExtras(b);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
 }
