@@ -7,8 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
 import java.util.List;
@@ -69,25 +72,30 @@ public class CalenderView extends BaseAdapter {
         TextView textView = (TextView) gridView.findViewById(R.id.grid_item_label);
         TextView week = (TextView) gridView.findViewById(R.id.weekday);
         ImageView image = (ImageView) gridView.findViewById(R.id.booked_af_user);
+        LinearLayout background = (LinearLayout) gridView.findViewById(R.id.background);
+        LinearLayout border = (LinearLayout) gridView.findViewById(R.id.border);
 
 
 ////      finder dato på baggrund af de reservationer der er sendt med, datoen vises i toppen af aktiviteten.
-        LocalDate date = new LocalDate(dates.get(0).getVaskeDage().get(position).getVasketider().get(0).getDato());
+        DateTime date = CalenderController.millisToDate(dates.get(0).getVaskeDage().get(position).getVasketider().get(0).getDato());
+        System.out.println("CalendarView " + date.getMillis() + " " +date.getDayOfMonth() + " " + date.toString());
         int day = date.getDayOfMonth();
         String weekday = CalenderController.getWeekDay(date);
+        boolean erFortid = CalenderController.erMindre(CalenderController.getToday(), date);
 
         if (isWeek) {
             month = ". " + CalenderController.getMonthInText(date.getMonthOfYear());
         }
         boolean harBrugerBooked = false;
+
         textView.setText(day + month);
+
         for (VaskeTavle vt : dates) {
             for (int i = 0; i < vt.getVaskeDage().get(position).getAntalBlokke(); i++) {
                 if (vt.getVaskeDage().get(position).getVasketider().get(i).getReservation() != null) {
                     int bruger = vt.getVaskeDage().get(position).getVasketider().get(i).getReservation().getBrugerID();
                     if (bruger == BookingApplication.bruger.getBrugerID()) {
                         harBrugerBooked = true;
-                        System.out.println("true");
                     }
                 }
             }
@@ -97,16 +105,41 @@ public class CalenderView extends BaseAdapter {
 
 //        Check om vaskedagen er ledig, hvis den er , så males der grøn ellers rød
         if (erDagLedig[position]) {
-            gridView.setBackgroundColor(Color.GREEN);
-            if(harBrugerBooked){
+            background.setBackgroundColor(Color.GREEN);
+            border.setBackgroundColor(Color.GREEN);
+            if (harBrugerBooked) {
                 image.setBackgroundResource(R.drawable.avail_dot);
             }
+            if (erFortid) {
+                background.setBackgroundColor(Color.parseColor("#006600"));
+                border.setBackgroundColor(Color.parseColor("#006600"));
+                if (harBrugerBooked) {
+                    image.setBackgroundResource(R.drawable.overdue_avail_dot);
+                }
+            }
+
         } else {
-            gridView.setBackgroundColor(Color.RED);
-            if(harBrugerBooked){
+            background.setBackgroundColor(Color.RED);
+            if (harBrugerBooked) {
                 image.setBackgroundResource(R.drawable.full_dot);
             }
+            if (erFortid) {
+                background.setBackgroundColor(Color.parseColor("#660000"));
+                border.setBackgroundColor(Color.parseColor("#660000"));
+                if (harBrugerBooked) {
+                    image.setBackgroundResource(R.drawable.overdue_full_dot);
+                }
+
+            }
+
         }
+
+        if (!erFortid && CalenderController.getToday().getDayOfMonth() == day) {
+            if (date.equals(CalenderController.getToday())) {
+                border.setBackgroundColor(Color.RED);
+            }
+        }
+
 
         return gridView;
     }

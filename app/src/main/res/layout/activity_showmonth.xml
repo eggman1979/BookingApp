@@ -32,7 +32,7 @@
 
             <TextView
                 android:id="@+id/maaned_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -67,11 +67,7 @@
             tools:layout_editor_absoluteY="8dp" />
 
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_vertical"
-        android:layout_below="@id/gridView1">
+
 
         <TextView
             android:id="@+id/showWeek"

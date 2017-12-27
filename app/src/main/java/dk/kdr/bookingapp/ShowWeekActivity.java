@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import java.util.List;
 import data.VaskeDag;
@@ -29,8 +31,8 @@ public class ShowWeekActivity extends AppCompatActivity implements Callback, Vie
     VaskeTidController vtc;
     List<VaskeTavle> tavler;
     ProgressDialog pDiag;
-    LocalDate startDag;
-    LocalDate slutDag;
+    DateTime startDag;
+    DateTime slutDag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +99,8 @@ public class ShowWeekActivity extends AppCompatActivity implements Callback, Vie
         }
         int weekInYear = CalenderController.getWeek(week );
         currentWeek.setText("uge " + weekInYear);
-        final LocalDate startDag = CalenderController.getFirstDayOfWeek(week);
-        final LocalDate slutDato = CalenderController.getLastDayOfWeek(week);
+        final DateTime startDag = CalenderController.getFirstDayOfWeek(week);
+        final DateTime slutDato = CalenderController.getLastDayOfWeek(week);
 
         tavler = vtc.fillVaskeTavle(startDag, slutDato);
         if (vtc.getErDagLedig() != null) {

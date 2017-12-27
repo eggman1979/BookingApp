@@ -2,6 +2,7 @@ package logik;
 
 import android.util.Log;
 
+import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Instant;
 import org.joda.time.LocalDate;
@@ -53,7 +54,7 @@ public class VaskeTidController {
         this.erDagLedig = erDagLedig;
     }
 
-    public List<VaskeDag> createVaskeDage(LocalDate startDag, LocalDate slutDag, int tavleId) {
+    public List<VaskeDag> createVaskeDage(DateTime startDag, DateTime slutDag, int tavleId) {
 
         int antalDage = CalenderController.getDaysBetween(startDag, slutDag);
 
@@ -64,6 +65,8 @@ public class VaskeTidController {
         for (int i = 0; i < antalDage; i++) {
 
             long dateInMilli = CalenderController.dateToMillis(startDag.plusDays(i));
+            System.out.println("Startdag i createVaskedage" +startDag.toString());
+            System.out.println("date in millis createVaskedage" +dateInMilli);
             int antalBlokke = vBlokke.size();
             List<VaskeTid> vTider = new ArrayList<>();
 
@@ -87,10 +90,10 @@ public class VaskeTidController {
         return vaskeDage;
     }
 
-    public List<VaskeTavle> fillVaskeTavle(LocalDate startDag, LocalDate slutDag) {
+    public List<VaskeTavle> fillVaskeTavle(DateTime startDag, DateTime slutDag) {
 
-        System.out.println(startDag);
-        System.out.println(slutDag);
+        System.out.println("fra fillVasketavle i VTCont" +startDag);
+        System.out.println("fra fillVasketavle i VTCont " +slutDag);
         int antalDage = CalenderController.getDaysBetween(startDag, slutDag);
 
         System.out.println(antalDage + "frafill tavle");
@@ -126,7 +129,6 @@ public class VaskeTidController {
 
     public boolean[] opretLedighedsTabel(int antalDage) {
         erDagLedig = new boolean[antalDage];
-        System.out.println("*********** " + antalDage + " fra opretLedighedsTabel() **********");
         /*
         Følgende loop skal gå igennem alle dage, og checke om der findes en vasketid, dette skal gøre på alle tavler, med reservation == null, i såfald skal pågældende felt i erDagLedig arrayet vendes til at være sandt
          */

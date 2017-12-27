@@ -85,6 +85,7 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
             }
         }
 
+        System.out.println(" fra ReservertidAktivitet   " +  dato);
         datoText.setText(CalenderController.millisToDate(dato).toString());
         vaskeBlokText.setText(vaskeBlok + "");
         vaskeRumText.setText(vaskerum + "");

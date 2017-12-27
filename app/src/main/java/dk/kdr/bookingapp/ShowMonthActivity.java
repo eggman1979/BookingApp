@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 
@@ -44,7 +45,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     TextView maanedText, prev, next, week;
     int month;
     VaskeTidController vs;
-    LocalDate startDay;
+    DateTime startDay;
     ProgressDialog pDiag;
     boolean[] erDagLedig;
 
@@ -57,8 +58,10 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
         month = CalenderController.getToday().getMonthOfYear();
         startDay = CalenderController.getFirstMondayInCalender(month);
+        System.out.println(startDay.toString() + "***** Hej fra " + this.getClass());
 
-            setContentView(R.layout.activity_showmonth);
+
+        setContentView(R.layout.activity_showmonth);
 
 
         //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
@@ -168,27 +171,27 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onBackPressed() {
 
-            System.out.println("HEFHFEFE");
-            AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-            } else {
-                builder = new AlertDialog.Builder(this);
-            }
-            builder.setTitle("Afslut Vaskebooking")
-                    .setMessage("Du er ved at afslutte Vaskebooking, er du sikker=")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ShowMonthActivity.super.onBackPressed();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
+        System.out.println("HEFHFEFE");
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle("Afslut Vaskebooking")
+                .setMessage("Du er ved at afslutte Vaskebooking, er du sikker=")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ShowMonthActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
 
     }
 }

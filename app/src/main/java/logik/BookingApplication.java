@@ -40,6 +40,7 @@ public class BookingApplication extends Application {
     public static LokalPersistens persistent;
     public static SharedPreferences prefs;
     public static SharedPreferences.Editor prefEditor;
+    public static long sidstOpdateret  = 0;
 
 
     //  SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);

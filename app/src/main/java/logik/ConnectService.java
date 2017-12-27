@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.io.BufferedReader;
@@ -54,8 +55,8 @@ public class ConnectService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
 
-    //    String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
-    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // hjemmenet
+//        String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
+    String baseURL = "http://10.123.199.195:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // hjemmenet
 
 
     @Nullable
@@ -120,7 +121,7 @@ public class ConnectService extends Service {
             Log.w("data fra server ", resList.get(0).getBrugerID() + "  der er noget?");
             BookingApplication.vtCont.addReservations(resList);
             for (Reservation res : resList) {
-                LocalDate dd = CalenderController.millisToDate(res.getDato());
+                DateTime dd = CalenderController.millisToDate(res.getDato());
                 System.out.println(dd.toString() + " ReservationsID er " + res.getReservationID() + " VaskeBlok " + res.getvaskeBlokID());
             }
         } else {

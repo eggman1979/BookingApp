@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class VisReservationer extends AppCompatActivity implements AdapterView.O
         reservationer = BookingApplication.vtCont.getReservations();
         for (Reservation res : reservationer) {
             if (res.getBrugerID() == BookingApplication.bruger.getBrugerID()) {
-                if (res.getDato() >= CalenderController.dateToMillis(LocalDate.now())) {
+                if (res.getDato() >= CalenderController.dateToMillis(DateTime.now())) {
                     myRes.add(res);
                 }
             }
