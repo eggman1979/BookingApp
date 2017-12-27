@@ -32,7 +32,6 @@ public class VisLedigeVaskerum extends AppCompatActivity implements AdapterView.
         dato = i.getLongExtra("Dato", -1L);
         blok = i.getIntExtra("Blok", -1);
         VaskeBlok vBlok = BookingApplication.vtCont.getvBlokke().get(blok);
-        System.out.println(dato);
         List<VaskeTid> tider = BookingApplication.vtCont.findVaskeTid(dato,blok);
         boolean[] ledigeRum = BookingApplication.vtCont.ledigeVaskerum(dato, blok);
 
@@ -53,7 +52,7 @@ public class VisLedigeVaskerum extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println("DU HAR TRYKKET PÅ " + position);
+
         Intent i = new Intent(this, ReserverTidAktivitet.class );
         Bundle b = new Bundle();
         b.putLong("dato", dato);

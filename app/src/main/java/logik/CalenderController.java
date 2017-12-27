@@ -26,7 +26,7 @@ public class CalenderController {
      */
 
     public static long dateToMillis(DateTime date) {
-  System.out.println("Finder millisekunder i dateToMillisMetoden i Calendar controller" + date.withZone(DateTimeZone.forID("Europe/Copenhagen")).withTimeAtStartOfDay().getMillis());
+
         return date.withZone(DateTimeZone.forID("Europe/Copenhagen")).withTimeAtStartOfDay().getMillis();
     }
 
@@ -36,7 +36,6 @@ public class CalenderController {
 
     public static DateTime getToday() {
         DateTime now = DateTime.now().withZone(DateTimeZone.forID("Europe/Copenhagen")).withTimeAtStartOfDay();
-        System.out.println("getToday fra calCont " +now.toString());
         return now;
     }
 

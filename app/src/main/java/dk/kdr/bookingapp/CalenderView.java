@@ -78,7 +78,7 @@ public class CalenderView extends BaseAdapter {
 
 ////      finder dato på baggrund af de reservationer der er sendt med, datoen vises i toppen af aktiviteten.
         DateTime date = CalenderController.millisToDate(dates.get(0).getVaskeDage().get(position).getVasketider().get(0).getDato());
-        System.out.println("CalendarView " + date.getMillis() + " " +date.getDayOfMonth() + " " + date.toString());
+      
         int day = date.getDayOfMonth();
         String weekday = CalenderController.getWeekDay(date);
         boolean erFortid = CalenderController.erMindre(CalenderController.getToday(), date);

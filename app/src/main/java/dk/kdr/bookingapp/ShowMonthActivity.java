@@ -58,8 +58,6 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
 
         month = CalenderController.getToday().getMonthOfYear();
         startDay = CalenderController.getFirstMondayInCalender(month);
-        System.out.println(startDay.toString() + "***** Hej fra " + this.getClass());
-
 
         setContentView(R.layout.activity_showmonth);
 
@@ -172,7 +170,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onBackPressed() {
 
-        System.out.println("HEFHFEFE");
+
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);

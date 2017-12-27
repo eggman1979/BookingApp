@@ -66,27 +66,13 @@ public class BookingApplication extends Application {
         if (isBrugerSet) {
 
             try {
-                System.out.println("LOADES");
-
                 BookingApplication.bruger = (Bruger) persistent.hentGemtFil("bruger");
-                if (BookingApplication.bruger != null) {
-                    System.out.println("Bruger: Check");
-                }
-
                 BookingApplication.account = (Account) persistent.hentGemtFil("account");
-
-                if (BookingApplication.account != null) {
-                    System.out.println("Account: Check");
-                }
-
                 BookingApplication.boligForening = (BoligForening) persistent.hentGemtFil("boligforening");
 
-                if (BookingApplication.boligForening != null) {
-                    System.out.println("forening: Check");
-                }
                 Thread.sleep(10);
+
                 isBrugerLoaded = bruger != null && account != null && boligForening != null;
-                System.out.println("Er bruger dataloaded : " + isBrugerLoaded);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -94,10 +80,6 @@ public class BookingApplication extends Application {
         }
 
     }
-
-
-//        //TODO His brugeren er null, skal der logges ind, og der skal ikke auto initialiseres data
-
 
     public void startBinding() {
         /** Defines callbacks for service binding, passed to bindService() */
@@ -108,12 +90,8 @@ public class BookingApplication extends Application {
                                            IBinder service) {
                 // We've bound to LocalService, cast the IBinder and get LocalService instance
                 binder = (ConnectService.LocalBinder) service;
-
                 cService = binder.getService();
-                System.out.println("cService" + cService);
-
                 isBound = true;
-                System.out.println("isBound" + isBound);
             }
 
             @Override
@@ -135,21 +113,16 @@ public class BookingApplication extends Application {
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-//              if (BookingApplication.isBound){ //&& bruger != null) {
+
                 try {
-                    //    cService.hentGemtReservation("res");
-                    System.out.println("Der er nu hentet og størrelesn er : " + vtCont.getReservations().size());
-//
-//
+
+
                     Long sidstHentet = vtCont.getSidstHentet();
-                    System.out.println("SidstHentet er " + sidstHentet);
-////
 
                     cService.hentVaskeTavler();
-
-                    Thread.sleep(100);
-                    cService.hentVaskeBlokke();
                     Thread.sleep(100); //Har indsat sleep for ikke at spamme Servicen for meget.
+                    cService.hentVaskeBlokke();
+                    Thread.sleep(100);
                     cService.hentReservationer(bruger.getBoligForeningID(), sidstHentet);
 
                     isDataLoadedFromServer = true;
@@ -169,23 +142,6 @@ public class BookingApplication extends Application {
             }
         }, 100);
 
-//        h.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (isDataLoadedFromServer) {
-//                    vtCont.cleanReservation();
-//
-//                    System.out.println("DATA GEMMES");
-////                    cService.gemData(vtCont.getReservations(), "res");
-////                    cService.gemData(vtCont.getVaskeTavler(), "tavler");
-////                    cService.gemData(vtCont.getvBlokke(), "blokke");
-//
-//                    System.out.println("Antal reservationer efter rens = " + vtCont.getReservations().size());
-//                } else {
-//                    h.postDelayed(this, 100);
-//                }
-//            }
-//        }, 100);
 
     }
 

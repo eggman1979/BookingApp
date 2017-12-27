@@ -92,11 +92,7 @@ public class VaskeTidController {
 
     public List<VaskeTavle> fillVaskeTavle(DateTime startDag, DateTime slutDag) {
 
-        System.out.println("fra fillVasketavle i VTCont" +startDag);
-        System.out.println("fra fillVasketavle i VTCont " +slutDag);
         int antalDage = CalenderController.getDaysBetween(startDag, slutDag);
-
-        System.out.println(antalDage + "frafill tavle");
 
         for (VaskeTavle tavle : tavler) {
             tavle.setVaskeDage(createVaskeDage(startDag, slutDag, tavle.getTavleID()));
@@ -145,10 +141,10 @@ public class VaskeTidController {
                     }
                 }
             }
-            System.out.println("*********** " + antalDage + " fra opretLedighedsTabel() **********");
+
             return erDagLedig;
         } else {
-            System.out.println("Tavler er  null");
+
             return null;
         }
     }
@@ -205,7 +201,7 @@ public class VaskeTidController {
 
 
         LocalDate date = new LocalDate(dato);
-        System.out.println("Datoen er " + date.toString());
+
         for (int i = 0; i < antalDage; i++) {
             if (tavler.get(0).getVaskeDage().get(i).getVasketider().get(0).getDato() == dato) {
                 index = i;
@@ -215,10 +211,7 @@ public class VaskeTidController {
 
         for (int i = 0; i < tavler.size(); i++) {
             VaskeTavle tavle = tavler.get(i);
-            System.out.println("Debug: BLokken er " + blok);
             if (tavle.getVaskeDage().get(index).getVasketider().get(blok).getReservation() == null) {
-
-
                 ledigeRum[i] = true;
             }
         }
@@ -227,14 +220,13 @@ public class VaskeTidController {
 
     public boolean[] ledigeVaskeTider(long dato, boolean isMonth) {
         // printAllReservations();
-System.out.println("Er måned " + isMonth);
+
         int antalDage = ANTAL_DAGE_I_KALENDER;
         if (!isMonth) {
             antalDage = 7;
         }
-        System.out.println("antaldage " + antalDage);
+
         boolean[] ledigeTider = new boolean[vBlokke.size()];
-        System.out.println("ræder ind i ledigeVaskeDage antal dage er " + antalDage + " ØØØØØØ");
         int index = 0;
         for (int i = 0; i < antalDage; i++) {
             if (getVaskeDage().get(i).getVasketider().get(0).getDato() == dato) {
@@ -256,25 +248,14 @@ System.out.println("Er måned " + isMonth);
     }
 
     public List<Reservation> getReservations() {
-        System.out.println("get res " + reservations);
+
         return reservations;
     }
-//    public void printAllReservations() {
-//        int i = 0;
-//        for (VaskeTavle tavle : tavler) {
-//            for (VaskeDag vDag : tavle.getVaskeDage()) {
-//                for (VaskeTid vTid : vDag.getVasketider()) {
-//                    System.out.println(vTid.getReservation() + " " + i++);
-//                }
-//            }
-//        }
-//    }
 
     public long getSidstHentet() {
         long sidstHentet = 0;
         if (reservations.size() > 0) {
             for (Reservation r : reservations) {
-                //    System.out.println(r.toString());
                 if (r.getTilfoejetDato() > sidstHentet) {
                     sidstHentet = r.getTilfoejetDato();
 
@@ -288,7 +269,6 @@ System.out.println("Er måned " + isMonth);
     public void cleanReservation() {
         List<Reservation> tempList = new ArrayList<>();
         int count = 0;
-        System.out.println("Reservationer inden rens:" + reservations.size());
         for (Reservation res : reservations) {
             for (Reservation res2 : reservations) {
                 if (res.getReservationID() == res2.getReservationID()) {
@@ -300,7 +280,6 @@ System.out.println("Er måned " + isMonth);
             }
 
         }
-        System.out.println("Count i renseMetoder er " + count);
         for (Reservation res : tempList) {
             reservations.remove(res);
         }
@@ -308,7 +287,6 @@ System.out.println("Er måned " + isMonth);
     }
 
     public Reservation getReservation(long dato, int tavle, int blok) {
-        System.out.println("dato"  + dato  +" blok " +blok + "tavle " + tavle);
         for (Reservation res : reservations) {
             if (res.getDato() == dato && res.getTavleID() == (tavle) && res.getvaskeBlokID() == (blok)) {
                 return res;

@@ -122,7 +122,6 @@ public class ConnectService extends Service {
             BookingApplication.vtCont.addReservations(resList);
             for (Reservation res : resList) {
                 DateTime dd = CalenderController.millisToDate(res.getDato());
-                System.out.println(dd.toString() + " ReservationsID er " + res.getReservationID() + " VaskeBlok " + res.getvaskeBlokID());
             }
         } else {
             Log.w("Error", " Reservationerne er null");
@@ -137,7 +136,6 @@ public class ConnectService extends Service {
         try {
             URL url = new URL(baseURL + urlExtend);
             line = openServiceConnection(url);
-            System.out.println(line);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -194,7 +192,6 @@ public class ConnectService extends Service {
         InputStream is = null;
         try {
             try {
-                System.out.println(url.toString());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
@@ -215,7 +212,7 @@ public class ConnectService extends Service {
                 is.close();
             }
         } catch (Exception e) {
-            System.out.println("Kunne ikke få forbindelse med serveren...");
+            //TODO skal håndteres
         }
         return line;
     }
@@ -256,8 +253,6 @@ public class ConnectService extends Service {
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             line = br.readLine();
             response = responseCode + "," + line;
-            System.out.println(response);
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -287,7 +282,6 @@ public class ConnectService extends Service {
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             response = responseCode+","+ br.readLine();
-            System.out.println(response);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {

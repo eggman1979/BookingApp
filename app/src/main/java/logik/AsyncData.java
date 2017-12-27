@@ -26,23 +26,17 @@ public class AsyncData extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-
-        System.out.println("Bruger = " + BookingApplication.bruger.getNavn());
+        
         try {
+            BookingApplication.cService.hentReservationer(BookingApplication.boligForening.getId(), BookingApplication.vtCont.getSidstHentet());
 
-            System.out.println("blokke er: "+ BookingApplication.vtCont.getvBlokke().size());
-            System.out.println("tavler er: "+BookingApplication.vtCont.getVaskeTavler().size());
-
-
-                BookingApplication.cService.hentReservationer(BookingApplication.boligForening.getId(), BookingApplication.vtCont.getSidstHentet());
-
-            if(BookingApplication.vtCont.getVaskeTavler().size() == 0) {
+            if (BookingApplication.vtCont.getVaskeTavler().size() == 0) {
                 Thread.sleep(100);
                 BookingApplication.cService.hentVaskeTavler();
 
 
             }
-            if(BookingApplication.vtCont.getvBlokke().size() == 0) {
+            if (BookingApplication.vtCont.getvBlokke().size() == 0) {
                 Thread.sleep(100);
                 BookingApplication.cService.hentVaskeBlokke();
             }

@@ -44,10 +44,10 @@ public class VisVaskeDagActivity extends AppCompatActivity {
         Bundle b = i.getExtras();
 
         dato = b.getLong("Dato");
-        System.out.println("Fra VisVaskeDagAktivitet - dato " + dato);
+
 
         List<VaskeDag> vaskeDage = BookingApplication.vtCont.findVaskeDag(dato);
-        System.out.println("Vaskedage "+vaskeDage.size());
+
 
         ledigeTider = BookingApplication.vtCont.ledigeVaskeTider(dato, BookingApplication.isMonth);
         List<VaskeBlok> vBlokke = BookingApplication.vtCont.getvBlokke();
@@ -62,8 +62,6 @@ public class VisVaskeDagActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-
-                System.out.println("Fra VaskeDagAktivitet - setOnItem.... Dato " + dato);
 
                 Intent i = new Intent(getApplicationContext(), VisLedigeVaskerum.class);
                 i.putExtra("Dato", dato);

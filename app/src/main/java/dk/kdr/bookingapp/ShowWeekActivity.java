@@ -62,9 +62,6 @@ public class ShowWeekActivity extends AppCompatActivity implements Callback, Vie
 
         tavler = vtc.fillVaskeTavle(startDag, slutDag);
 
-
-        System.out.println("Antallet af tavler er " + tavler.size() + "; antallet af vaskedage: " + vtc.getErDagLedig().length);
-
         if (vtc.getErDagLedig() != null) {
             weekList.setAdapter(new CalenderView(this, tavler, vtc.getErDagLedig(), true));
         }

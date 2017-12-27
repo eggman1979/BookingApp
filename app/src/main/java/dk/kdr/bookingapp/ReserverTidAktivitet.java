@@ -85,7 +85,7 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
             }
         }
 
-        System.out.println(" fra ReservertidAktivitet   " +  dato);
+
         datoText.setText(CalenderController.millisToDate(dato).toString());
         vaskeBlokText.setText(vaskeBlok + "");
         vaskeRumText.setText(vaskerum + "");
@@ -96,7 +96,7 @@ public class ReserverTidAktivitet extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        System.out.println("Vaskeblok = " + vaskeBlok);
+
         if (v == afvis) {
             Toast.makeText(this, "Du valgte at afvise reservationen", Toast.LENGTH_SHORT).show();
             finish();
