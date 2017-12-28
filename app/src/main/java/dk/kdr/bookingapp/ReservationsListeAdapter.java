@@ -71,7 +71,7 @@ public class ReservationsListeAdapter extends BaseAdapter {
 
         tid.setText("Kl. "+blok.getStartTid() + ":00");
 
-        String datoString = CalenderController.millisToDate(res.getDato()).toString();
+        String datoString = CalenderController.millisToDate(res.getDato()).toString("dd MMMMM YYYY");
 
         dato.setText(datoString +" ");
 

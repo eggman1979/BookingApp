@@ -7,17 +7,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import data.Reservation;
 import data.VaskeBlok;
-import data.VaskeDag;
 import data.VaskeTid;
 import logik.BookingApplication;
 
-public class VisLedigeVaskerum extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class VisLedigeVaskerum extends BaseActivity implements AdapterView.OnItemClickListener{
 
     ListView list;
     TextView blokText;

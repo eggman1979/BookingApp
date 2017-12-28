@@ -18,7 +18,7 @@ import logik.BookingApplication;
 import logik.CalenderController;
 import logik.Callback;
 
-public class ReserverTidAktivitet extends AppCompatActivity implements View.OnClickListener, Callback {
+public class ReserverTidAktivitet extends BaseActivity   implements View.OnClickListener, Callback {
 
     Button accept, afvis, delete;
     TextView datoText, vaskeRumText, brugerIDText, boligforeningText, tidText, vaskeBlokText, statusText;

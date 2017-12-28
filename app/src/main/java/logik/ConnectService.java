@@ -1,33 +1,21 @@
 package logik;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -37,8 +25,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import data.Account;
 import data.BoligForening;
 import data.Bruger;
 import data.Reservation;
@@ -55,7 +41,7 @@ public class ConnectService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
 
-//        String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
+    //        String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
     String baseURL = "http://10.123.199.195:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // hjemmenet
 
 
@@ -118,13 +104,11 @@ public class ConnectService extends Service {
         ArrayList<Reservation> resList = gson.fromJson(line, new TypeToken<List<Reservation>>() {
         }.getType());
         if (resList != null && resList.size() > 0) {
-            Log.w("data fra server ", resList.get(0).getBrugerID() + "  der er noget?");
             BookingApplication.vtCont.addReservations(resList);
             for (Reservation res : resList) {
                 DateTime dd = CalenderController.millisToDate(res.getDato());
             }
         } else {
-            Log.w("Error", " Reservationerne er null");
         }
     }
 
@@ -144,7 +128,6 @@ public class ConnectService extends Service {
 
         Gson gson = new Gson();
         BoligForening bf = gson.fromJson(line, BoligForening.class);
-        Log.w("data fra server", bf.getNavn() + "  der er noget?");
         BookingApplication.boligForening = bf;
         BookingApplication.persistent.gemData(BookingApplication.boligForening, "boligforening");
     }
@@ -156,12 +139,9 @@ public class ConnectService extends Service {
 
             URL url = new URL(baseURL + "vtService/vasketavler/" + BookingApplication.boligForening.getId());
             String data = openServiceConnection(url);
-            Log.w("run: ", "");
-
             Gson gson = new Gson();
             ArrayList<VaskeTavle> tavleList = gson.fromJson(data, new TypeToken<List<VaskeTavle>>() {
             }.getType());
-            Log.w("data fra server", tavleList.size() + "");
             BookingApplication.vtCont.setVaskeTavler(tavleList);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -175,12 +155,11 @@ public class ConnectService extends Service {
 
             URL url = new URL(baseURL + "vaskebloksservice/vaskeblokke/" + BookingApplication.boligForening.getId());
             String data = openServiceConnection(url);
-            Log.w("run: ", "");
 
             Gson gson = new Gson();
             ArrayList<VaskeBlok> resList = gson.fromJson(data, new TypeToken<List<VaskeBlok>>() {
             }.getType());
-            Log.w("data fra server", resList.size() + "");
+
             BookingApplication.vtCont.setvBlokke(resList);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -200,7 +179,7 @@ public class ConnectService extends Service {
                 BufferedReader r = new BufferedReader(new InputStreamReader(is));
 
                 line = r.readLine();
-                Log.w("run: ", line);
+
 
             } catch (ProtocolException e) {
                 e.printStackTrace();
@@ -265,7 +244,7 @@ public class ConnectService extends Service {
     public String deleteReservation(int reservationID) {
         InputStream is = null;
         String response = "";
-         int  responseCode = -500;
+        int responseCode = -500;
         try {
             URL url = new URL(baseURL + "reservationService/reservationer/" + reservationID);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -281,7 +260,7 @@ public class ConnectService extends Service {
                 is = connection.getErrorStream();
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            response = responseCode+","+ br.readLine();
+            response = responseCode + "," + br.readLine();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {

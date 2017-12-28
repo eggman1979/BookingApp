@@ -3,33 +3,21 @@ package dk.kdr.bookingapp;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-
-
 import java.util.List;
-
 import data.VaskeDag;
-
 import data.VaskeTavle;
 import logik.AsyncData;
 import logik.BookingApplication;
@@ -37,7 +25,7 @@ import logik.CalenderController;
 import logik.Callback;
 import logik.VaskeTidController;
 
-public class ShowMonthActivity extends AppCompatActivity implements View.OnClickListener, Callback {
+public class ShowMonthActivity extends BaseActivity implements View.OnClickListener, Callback {
 
 
     List<VaskeTavle> dates;
@@ -104,26 +92,7 @@ public class ShowMonthActivity extends AppCompatActivity implements View.OnClick
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.vis_reservationer:
-                Toast.makeText(this, "Du får nu vist dine reservationer", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(this, VisReservationer.class);
-                startActivity(i);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
 
     @Override
     public void onClick(View v) {

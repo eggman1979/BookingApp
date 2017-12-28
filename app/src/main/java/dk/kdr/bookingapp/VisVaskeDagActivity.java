@@ -24,7 +24,7 @@ import logik.VaskeTidController;
  * Aktivitet der viser en liste over hvilke vaskeblokke der er tilgængelige, samt hvilke af disse der er ledige
  */
 
-public class VisVaskeDagActivity extends AppCompatActivity {
+public class VisVaskeDagActivity extends BaseActivity {
 
     ListView timeListe;
     List<VaskeTid> vTid;

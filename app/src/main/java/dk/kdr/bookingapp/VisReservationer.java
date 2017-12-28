@@ -23,7 +23,7 @@ import logik.CalenderController;
  */
 
 
-public class VisReservationer extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class VisReservationer extends BaseActivity implements AdapterView.OnItemClickListener {
 
     ListView list;
     List<Reservation> myRes;

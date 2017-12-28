@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import java.util.List;
 import data.VaskeDag;
 import data.VaskeTavle;
@@ -23,7 +22,7 @@ import logik.CalenderController;
 import logik.Callback;
 import logik.VaskeTidController;
 
-public class ShowWeekActivity extends AppCompatActivity implements Callback, View.OnClickListener {
+public class ShowWeekActivity extends BaseActivity implements Callback, View.OnClickListener {
 
     int week = 0;
     ListView weekList;
@@ -136,7 +135,7 @@ public class ShowWeekActivity extends AppCompatActivity implements Callback, Vie
     @Override
     public void onEventCompleted(String msg) {
         tavler= vtc.fillVaskeTavle(startDag, slutDag);
-     ;
+
 
         BookingApplication.isMonth = false;
     weekList  .setAdapter(new CalenderView(this, tavler, vtc.getErDagLedig(), true));

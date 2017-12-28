@@ -65,8 +65,7 @@ public class VaskeTidController {
         for (int i = 0; i < antalDage; i++) {
 
             long dateInMilli = CalenderController.dateToMillis(startDag.plusDays(i));
-            System.out.println("Startdag i createVaskedage" +startDag.toString());
-            System.out.println("date in millis createVaskedage" +dateInMilli);
+
             int antalBlokke = vBlokke.size();
             List<VaskeTid> vTider = new ArrayList<>();
 
