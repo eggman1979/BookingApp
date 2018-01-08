@@ -66,12 +66,7 @@ public class ConnectService  {
 
         return hentetBruger;
     }
-
-
-
-
-
-
+    
 
     public void hentReservationer(final int boligID, final long sidstHentet) throws IOException { //TODO Der skal et boligselskabs id med som parameter
 System.out.println("hentReservationer");
