@@ -13,7 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
+
 import java.util.List;
+
 import data.VaskeDag;
 import data.VaskeTavle;
 import logik.AsyncData;
@@ -93,7 +95,7 @@ public class ShowWeekActivity extends BaseActivity implements Callback, View.OnC
         } else if (v == nextWeek) {
             week++;
         }
-        int weekInYear = CalenderController.getWeek(week );
+        int weekInYear = CalenderController.getWeek(week);
         currentWeek.setText("uge " + weekInYear);
         final DateTime startDag = CalenderController.getFirstDayOfWeek(week);
         final DateTime slutDato = CalenderController.getLastDayOfWeek(week);
@@ -108,37 +110,37 @@ public class ShowWeekActivity extends BaseActivity implements Callback, View.OnC
     @Override
     public void onBackPressed() {
 
-
-        AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(this);
-        }
-        builder.setTitle("Afslut Vaskebooking")
-                .setMessage("Du er ved at afslutte Vaskebooking, er du sikker=")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ShowWeekActivity.super.onBackPressed();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-
+        if (isTaskRoot()) {
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(this);
+            }
+            builder.setTitle("Afslut Vaskebooking")
+                    .setMessage("Du er ved at afslutte Vaskebooking, er du sikker=")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            ShowWeekActivity.super.onBackPressed();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        } else{ super.onBackPressed();}
     }
 
     @Override
     public void onEventCompleted(String msg) {
-        tavler= vtc.fillVaskeTavle(startDag, slutDag);
+        tavler = vtc.fillVaskeTavle(startDag, slutDag);
 
 
         BookingApplication.isMonth = false;
-    weekList  .setAdapter(new CalenderView(this, tavler, vtc.getErDagLedig(), true));
+        weekList.setAdapter(new CalenderView(this, tavler, vtc.getErDagLedig(), true));
     }
 
     @Override

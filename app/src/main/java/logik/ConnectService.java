@@ -1,17 +1,10 @@
 package logik;
 
-import android.app.Service;
-import android.content.Intent;
-import android.content.SyncStatusObserver;
-import android.os.Binder;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
+
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import org.joda.time.DateTime;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -25,7 +18,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import data.BoligForening;
 import data.Bruger;
 import data.Reservation;
@@ -66,7 +58,7 @@ public class ConnectService  {
 
         return hentetBruger;
     }
-    
+
 
     public void hentReservationer(final int boligID, final long sidstHentet) throws IOException { //TODO Der skal et boligselskabs id med som parameter
 System.out.println("hentReservationer");
