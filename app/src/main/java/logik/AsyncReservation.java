@@ -15,18 +15,20 @@ public class AsyncReservation extends AsyncTask {
     ProgressDialog pDiag;
     private int responseCode;
     private String response;
+    ConnectService cService;
 
     public AsyncReservation(Callback cb, Reservation reservation, ProgressDialog pDiag) {
         this.cb = cb;
         this.reservation = reservation;
         this.pDiag = pDiag;
+        cService = new ConnectService();
     }
 
     @Override
     protected Object doInBackground(Object[] params) {
 
         // Der skal være en returværdi der fortæller om det er gået godt eller ej;
-        String answer  =BookingApplication.cService.reserverVasketid(reservation);
+        String answer  = cService.reserverVasketid(reservation);
 
          responseCode = Integer.parseInt(answer.split(",")[0]);
         response = answer.split(",")[1];

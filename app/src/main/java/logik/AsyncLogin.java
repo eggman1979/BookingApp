@@ -16,20 +16,22 @@ public class AsyncLogin extends AsyncTask<Void, Void, Void> {
     Callback cb;
     final String password;
     final String user;
+    ConnectService cService;
 
     public AsyncLogin(Callback cb, String user, String password) {
         this.cb = cb;
         this.password = password;
         this.user = user;
+         cService = new ConnectService();
     }
 
 
     @Override
     protected Void doInBackground(Void... params) {
         try {
-        BookingApplication.cService.login(user, password, "1");
+       cService.login(user, password, "1");
             Thread.sleep(100);
-            BookingApplication.cService.hentBoligforening(BookingApplication.bruger.getBoligForeningID());
+         cService.hentBoligforening(BookingApplication.bruger.getBoligForeningID());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (IOException e) {

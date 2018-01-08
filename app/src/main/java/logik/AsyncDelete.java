@@ -12,6 +12,7 @@ public class AsyncDelete extends AsyncTask {
 
     Callback cb;
     ProgressDialog pDiag;
+    ConnectService cService;
 
     int resID;
     int responseCode = -1;
@@ -24,13 +25,14 @@ public class AsyncDelete extends AsyncTask {
         this.cb = cb;
         this.pDiag = pDiag;
         this.resID = resID;
+        cService = new ConnectService();
     }
 
 
     @Override
     protected Object doInBackground(Object[] params) {
 
-        answer = BookingApplication.cService.deleteReservation(resID);
+        answer = cService.deleteReservation(resID);
         responseCode = Integer.parseInt(answer.split(",")[0]);
         response =answer.split(",")[1];
         return null;

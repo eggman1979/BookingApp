@@ -37,20 +37,9 @@ import data.VaskeTavle;
  * Created by KimdR on 01-11-2017.
  */
 
-public class ConnectService extends Service {
+public class ConnectService  {
 
-    private final IBinder mBinder = new LocalBinder();
-
-
-            String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
-//    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // hjemmenet
-
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
+      String baseURL = Constants.serverUrl;
 
     public Bruger login(final String userName, final String password, final String foreningID) {
         BookingApplication.isBrugerSet = false;
@@ -81,12 +70,7 @@ public class ConnectService extends Service {
 
 
 
-    class LocalBinder extends Binder {
-        ConnectService getService() {
-            // Return this instance of LocalService so clients can call public methods
-            return ConnectService.this;
-        }
-    }
+
 
 
     public void hentReservationer(final int boligID, final long sidstHentet) throws IOException { //TODO Der skal et boligselskabs id med som parameter
@@ -106,7 +90,7 @@ System.out.println("hentReservationer");
 
         ArrayList<Reservation> resList = gson.fromJson(line, new TypeToken<List<Reservation>>() {
         }.getType());
-        System.out.println(resList + " wfewfwefwe");
+
 
         if (resList != null && resList.size() > 0) {
             BookingApplication.vtCont.addReservations(resList);

@@ -19,27 +19,28 @@ public class AsyncData extends AsyncTask<Void, Void, Void> {
 
     Callback cb;
     ProgressDialog pDiag;
+    ConnectService cService;
 
     public AsyncData(Callback cb, ProgressDialog pDiag) {
         this.cb = cb;
         this.pDiag = pDiag;
-
+cService = new ConnectService();
     }
 
     @Override
     protected Void doInBackground(Void... params) {
 
         try {
-System.out.println("async task");
-            BookingApplication.cService.hentReservationer(BookingApplication.boligForening.getId(), BookingApplication.vtCont.getSidstHentet());
+
+            cService.hentReservationer(BookingApplication.boligForening.getId(), BookingApplication.vtCont.getSidstHentet());
 
             if (BookingApplication.vtCont.getVaskeTavler().size() == 0) {
                 Thread.sleep(100);
-                BookingApplication.cService.hentVaskeTavler();
+                cService.hentVaskeTavler();
             }
             if (BookingApplication.vtCont.getvBlokke().size() == 0) {
                 Thread.sleep(100);
-                BookingApplication.cService.hentVaskeBlokke();
+                cService.hentVaskeBlokke();
             }
         } catch (IOException e) {
             e.printStackTrace();

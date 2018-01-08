@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import data.Account;
 import data.Bruger;
-import logik.AsyncConnectionTest;
 import logik.AsyncLogin;
 import logik.BookingApplication;
 import logik.Callback;

@@ -19,14 +19,14 @@ import data.Reservation;
 
 public class BookingApplication extends Application {
 
-    private static BookingApplication ourInstance = new BookingApplication();
+
     public static boolean isBrugerSet = false;
     public static BoligForening boligForening = null;
-    private ConnectService.LocalBinder binder;
+ //   private ConnectService.LocalBinder binder;
     public static boolean isMonth = false;
-    public static ServiceConnection connection;
-    public static ConnectService cService = null;
-    public static boolean isBound = false;
+   // public static ServiceConnection connection;
+    //public static ConnectService cService = null;
+    //public static boolean isBound = false;
     public static Bruger bruger = null;
     public static Account account = null;
     public static VaskeTidController vtCont;
@@ -47,12 +47,12 @@ public class BookingApplication extends Application {
 
         persistent = new LokalPersistens(this);
 
-        startBinding();
+//        startBinding();
 
         isBrugerSet = prefs.getBoolean("isBrugerSet", false);
 
-        Intent intent = new Intent(this, ConnectService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+//        Intent intent = new Intent(this, ConnectService.class);
+//        bindService(intent, connection, Context.BIND_AUTO_CREATE);
         vtCont = new VaskeTidController();
         if (isBrugerSet) {
 
@@ -72,25 +72,25 @@ public class BookingApplication extends Application {
 
     }
 
-    public void startBinding() {
-        /** Defines callbacks for service binding, passed to bindService() */
-        connection = new ServiceConnection() {
-
-            @Override
-            public void onServiceConnected(ComponentName className,
-                                           IBinder service) {
-                // We've bound to LocalService, cast the IBinder and get LocalService instance
-                binder = (ConnectService.LocalBinder) service;
-                cService = binder.getService();
-                isBound = true;
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName arg0) {
-                isBound = false;
-            }
-        };
-    }
+//    public void startBinding() {
+//        /** Defines callbacks for service binding, passed to bindService() */
+//        connection = new ServiceConnection() {
+//
+//            @Override
+//            public void onServiceConnected(ComponentName className,
+//                                           IBinder service) {
+//                // We've bound to LocalService, cast the IBinder and get LocalService instance
+//                binder = (ConnectService.LocalBinder) service;
+//                cService = binder.getService();
+//                isBound = true;
+//            }
+//
+//            @Override
+//            public void onServiceDisconnected(ComponentName arg0) {
+//                isBound = false;
+//            }
+//        };
+//    }
 
 
     public static void setReservation(List<Reservation> reservations) {
@@ -99,9 +99,9 @@ public class BookingApplication extends Application {
 
 
 
-    public void dropBinding() {
-        unbindService(connection);
-    }
+//    public void dropBinding() {
+//        unbindService(connection);
+//    }
 
 
 
