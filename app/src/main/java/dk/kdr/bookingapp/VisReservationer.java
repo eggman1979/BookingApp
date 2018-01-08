@@ -36,6 +36,7 @@ public class VisReservationer extends BaseActivity implements AdapterView.OnItem
 
         myRes = new ArrayList<>();
         reservationer = BookingApplication.vtCont.getReservations();
+        System.err.println(reservationer.toString());
         for (Reservation res : reservationer) {
             if (res.getBrugerID() == BookingApplication.bruger.getBrugerID()) {
                 if (res.getDato() >= CalenderController.dateToMillis(DateTime.now())) {

@@ -260,6 +260,8 @@ public class VaskeTidController {
 
                 }
             }
+        }else{
+            return sidstHentet;
         }
 
         return sidstHentet + 1;

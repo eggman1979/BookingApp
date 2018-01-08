@@ -3,6 +3,7 @@ package dk.kdr.bookingapp;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SyncStatusObserver;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -49,8 +50,9 @@ public class ShowMonthActivity extends BaseActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_showmonth);
 
-
-        //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden de checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
+        System.out.println("WAKAWAKA");
+        //AsyncTask der har til opgave at sørge for at reservationerne er hentet, inden
+        // checkes, ellers er der stor sandsynliged for at kalenderen vises forkert.
         pDiag = ProgressDialog.show(this, "Henter data fra server, ", " vent venligst", true);
         new AsyncData(this, pDiag).execute();
 
@@ -92,7 +94,11 @@ public class ShowMonthActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        pDiag.dismiss();
+    }
 
     @Override
     public void onClick(View v) {
@@ -132,7 +138,26 @@ public class ShowMonthActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onEventFailed(String msg) {
-
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle("Fejl")
+                .setMessage("Serveren kunne ikke kontaktes")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ShowMonthActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
 

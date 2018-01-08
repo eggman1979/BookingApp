@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 import data.Bruger;
 
-public class Reservation implements Serializable, Parcelable {
+public class    Reservation implements Serializable, Parcelable {
 
     /**
      *

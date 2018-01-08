@@ -1,8 +1,10 @@
 package logik;
 
 import android.app.ProgressDialog;
+import android.content.SyncStatusObserver;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -26,15 +28,14 @@ public class AsyncData extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        
+
         try {
+System.out.println("async task");
             BookingApplication.cService.hentReservationer(BookingApplication.boligForening.getId(), BookingApplication.vtCont.getSidstHentet());
 
             if (BookingApplication.vtCont.getVaskeTavler().size() == 0) {
                 Thread.sleep(100);
                 BookingApplication.cService.hentVaskeTavler();
-
-
             }
             if (BookingApplication.vtCont.getvBlokke().size() == 0) {
                 Thread.sleep(100);
@@ -52,8 +53,11 @@ public class AsyncData extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        if (BookingApplication.vtCont.getVaskeTavler().size() > 0 && BookingApplication.vtCont.getvBlokke().size() > 0) {
-            cb.onEventCompleted(null);
+
+        if (BookingApplication.vtCont.getVaskeTavler() != null && BookingApplication.vtCont.getvBlokke() != null) {
+            if (BookingApplication.vtCont.getVaskeTavler().size() > 0 && BookingApplication.vtCont.getvBlokke().size() > 0) {
+                cb.onEventCompleted(null);
+            }
         } else {
             cb.onEventFailed(null);
         }

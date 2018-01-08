@@ -1,7 +1,7 @@
 package logik;
 
 import android.os.AsyncTask;
-import android.telecom.Call;
+
 
 import java.io.IOException;
 

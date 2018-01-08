@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import data.Account;
 import data.Bruger;
+import logik.AsyncConnectionTest;
 import logik.AsyncLogin;
 import logik.BookingApplication;
 import logik.Callback;
@@ -36,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAllBars();
-
         Fabric.with(this, new Crashlytics());
 
         //Brugeren forsøges at hentes fra telefonen, hvis denne allerede er logged ind
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(i);
             finish();
         }
+
 
     }
 
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onEventCompleted(String msg) {
+
+
         // Log in er gået godt og der kan skiftes aktivitet
         BookingApplication.account = new Account(password, Integer.parseInt(userName), foreningNavn);
 
@@ -97,6 +100,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pDiag.dismiss();
         Intent i = new Intent(this, ShowMonthActivity.class);
         startActivity(i);
+        finish();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (pDiag != null)
+            pDiag.dismiss();
     }
 
     @Override

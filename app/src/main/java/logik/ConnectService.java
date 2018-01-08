@@ -2,6 +2,7 @@ package logik;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SyncStatusObserver;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -41,8 +42,8 @@ public class ConnectService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
 
-    //        String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
-    String baseURL = "http://10.123.199.195:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // hjemmenet
+            String baseURL = "http://ubuntu4.javabog.dk:8842/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ue fra // Server
+//    String baseURL = "http://192.168.43.80:8080/BookingServer/rest/"; //TODO SKal ændres til den rigtige server når der skal testes ude fra // hjemmenet
 
 
     @Nullable
@@ -78,6 +79,8 @@ public class ConnectService extends Service {
     }
 
 
+
+
     class LocalBinder extends Binder {
         ConnectService getService() {
             // Return this instance of LocalService so clients can call public methods
@@ -87,7 +90,7 @@ public class ConnectService extends Service {
 
 
     public void hentReservationer(final int boligID, final long sidstHentet) throws IOException { //TODO Der skal et boligselskabs id med som parameter
-
+System.out.println("hentReservationer");
         String line = "";
         InputStream is = null;
 
@@ -103,6 +106,8 @@ public class ConnectService extends Service {
 
         ArrayList<Reservation> resList = gson.fromJson(line, new TypeToken<List<Reservation>>() {
         }.getType());
+        System.out.println(resList + " wfewfwefwe");
+
         if (resList != null && resList.size() > 0) {
             BookingApplication.vtCont.addReservations(resList);
             for (Reservation res : resList) {
@@ -169,18 +174,26 @@ public class ConnectService extends Service {
     public String openServiceConnection(URL url) {
         String line = "";
         InputStream is = null;
+        int responseCode = -1;
         try {
             try {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.connect();
-                is = conn.getInputStream();
+                responseCode = conn.getResponseCode();
+                if (responseCode == 200) {
+                    is = conn.getInputStream();
+                } else if (responseCode == 500) {
+                    is = conn.getErrorStream();
+                }
                 BufferedReader r = new BufferedReader(new InputStreamReader(is));
+
 
                 line = r.readLine();
 
-
+                String response = responseCode + "," + line;
+                System.out.println(response);
             } catch (ProtocolException e) {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
@@ -190,7 +203,10 @@ public class ConnectService extends Service {
             } finally {
                 is.close();
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e)
+
+        {
             //TODO skal håndteres
         }
         return line;
